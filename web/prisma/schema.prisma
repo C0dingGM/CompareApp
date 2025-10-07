@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id        String   @id @default(cuid())
+  upc       String?  @unique
+  brand     String
+  title     String
+  attrsJson Json?
+  Offers    Offer[]
+  Price     PriceHistory[]
+}
+
+model Retailer {
+  id       String  @id @default(cuid())
+  name     String
+  domain   String? @unique
+  ecoFlags String?
+  geoJson  Json?
+  Offers   Offer[]
+}
+
+model Offer {
+  id          String   @id @default(cuid())
+  product     Product  @relation(fields: [productId], references: [id])
+  productId   String
+  retailer    Retailer @relation(fields: [retailerId], references: [id])
+  retailerId  String
+  price       Decimal  @db.Numeric(10,2)
+  currency    String
+  url         String
+  inStock     Boolean  @default(true)
+  fetchedAt   DateTime @default(now())
+}
+
+model PriceHistory {
+  id         String   @id @default(cuid())
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  String
+  retailer   Retailer @relation(fields: [retailerId], references: [id])
+  retailerId String
+  price      Decimal  @db.Numeric(10,2)
+  ts         DateTime @default(now())
+}
+
+model Wishlist {
+  id      String        @id @default(cuid())
+  userId  String
+  items   WishlistItem[]
+}
+
+model WishlistItem {
+  id          String   @id @default(cuid())
+  wishlist    Wishlist @relation(fields: [wishlistId], references: [id])
+  wishlistId  String
+  product     Product  @relation(fields: [productId], references: [id])
+  productId   String
+  targetPrice Decimal? @db.Numeric(10,2)
+  targetDate  DateTime?
+}
+
+model Alert {
+  id         String   @id @default(cuid())
+  userId     String
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  String
+  condition  Json
+  lastFiredAt DateTime?
+}
+
+model Deal {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  productRef String?
+  price     Decimal? @db.Numeric(10,2)
+  storeRef  String?
+  tags      String?
+  lat       Float?
+  lng       Float?
+  votes     Vote[]
+}
+
+model Vote {
+  id     String @id @default(cuid())
+  userId String
+  deal   Deal   @relation(fields: [dealId], references: [id])
+  dealId String
+  value  Int
+}
