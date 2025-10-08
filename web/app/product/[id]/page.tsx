@@ -1,4 +1,4 @@
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import PriceChart from '../../../components/PriceChart';
 import { getProductWithOffers } from '../../../lib/mock';
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
@@ -16,16 +16,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
         ))}
       </ul>
       <h3>Price history</h3>
-      <div style={{ width: '100%', height: 320 }}>
-        <ResponsiveContainer>
-          <LineChart data={data.price_history}>
-            <XAxis dataKey="ts" hide />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="price" stroke="#2563eb" dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      <PriceChart data={data.price_history} />
     </div>
   );
 }
