@@ -1,5 +1,5 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { getProductWithOffers } from '../../../../lib/mock';
+import { getProductWithOffers } from '../../../lib/mock';
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
   const data = getProductWithOffers(params.id);
