@@ -13,10 +13,12 @@ export default function PriceChart({ data }: { data: any[] }) {
             label={{ value: 'Time', position: 'insideBottom', offset: -5 }}
           />
           <YAxis
+            tickFormatter={(v: number) => `$${Number(v).toFixed(2)}`}
             label={{ value: 'Price', angle: -90, position: 'insideLeft' }}
+            width={70}
           />
           <Tooltip formatter={(v: any) => [`$${Number(v).toFixed(2)}`, 'Price']} />
-          <Line type="monotone" dataKey="price" stroke="#2563eb" dot />
+          <Line type="monotone" dataKey="price" stroke="#2563eb" strokeWidth={2} dot />
         </LineChart>
       </ResponsiveContainer>
     </div>
