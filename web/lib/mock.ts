@@ -39,9 +39,19 @@ const offers = [
 ];
 
 const priceHistory = [
+  // Product 1 (Acme Widget 3000)
+  { product_id: '1', retailer: 'Amazon', price: 69.99, ts: new Date(Date.now() - 864e5 * 14).toISOString() },
+  { product_id: '1', retailer: 'Amazon', price: 64.99, ts: new Date(Date.now() - 864e5 * 10).toISOString() },
   { product_id: '1', retailer: 'Amazon', price: 59.99, ts: new Date(Date.now() - 864e5 * 7).toISOString() },
   { product_id: '1', retailer: 'Amazon', price: 54.99, ts: new Date(Date.now() - 864e5 * 5).toISOString() },
+  { product_id: '1', retailer: 'Amazon', price: 52.49, ts: new Date(Date.now() - 864e5 * 3).toISOString() },
   { product_id: '1', retailer: 'Amazon', price: 49.99, ts: new Date().toISOString() },
+  // Product 2 (Zenith Ultra Kettle)
+  { product_id: '2', retailer: 'Target', price: 39.99, ts: new Date(Date.now() - 864e5 * 14).toISOString() },
+  { product_id: '2', retailer: 'Target', price: 36.99, ts: new Date(Date.now() - 864e5 * 10).toISOString() },
+  { product_id: '2', retailer: 'Target', price: 34.99, ts: new Date(Date.now() - 864e5 * 7).toISOString() },
+  { product_id: '2', retailer: 'Target', price: 33.49, ts: new Date(Date.now() - 864e5 * 3).toISOString() },
+  { product_id: '2', retailer: 'Target', price: 29.99, ts: new Date().toISOString() },
 ];
 
 export function mockSearch(q: string) {
