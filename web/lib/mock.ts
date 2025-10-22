@@ -54,6 +54,16 @@ const priceHistory = [
   { product_id: '2', retailer: 'Target', price: 29.99, ts: new Date().toISOString() },
 ];
 
+// Generate last 30 days of mock price history for Product 3 (EcoCo Reusable Bottle)
+for (let i = 29; i >= 0; i--) {
+  const base = 22.99; // starting baseline
+  const drift = (29 - i) * -0.3; // slight downward trend over the month
+  const noise = (Math.random() * 4 - 2); // random noise in [-2, 2]
+  const price = +(base + drift + noise).toFixed(2);
+  priceHistory.push({ product_id: '3', retailer: 'Amazon', price, ts: new Date(Date.now() - 864e5 * i).toISOString() });
+}
+
+
 export function getBrands() {
   return Array.from(new Set(products.map(p => p.brand))).sort();
 }
