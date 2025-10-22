@@ -54,8 +54,16 @@ const priceHistory = [
   { product_id: '2', retailer: 'Target', price: 29.99, ts: new Date().toISOString() },
 ];
 
-export function mockSearch(q: string) {
-  return products.filter(p => (p.title + ' ' + p.brand).toLowerCase().includes(q.toLowerCase()));
+export function getBrands() {
+  return Array.from(new Set(products.map(p => p.brand))).sort();
+}
+
+export function mockSearch(q: string, brand?: string) {
+  const qq = q.trim();
+  if (qq.length < 1) return [];
+  let list = products;
+  if (brand) list = list.filter(p => p.brand.toLowerCase() === brand.toLowerCase());
+  return list.filter(p => (p.title + ' ' + p.brand).toLowerCase().includes(qq.toLowerCase()));
 }
 
 export function getProductWithOffers(id: string) {
@@ -66,4 +74,9 @@ export function getProductWithOffers(id: string) {
     offers: offers.filter(o => o.product_id === id),
     price_history: priceHistory.filter(p => p.product_id === id)
   };
+}
+
+
+export function getAllProducts() {
+  return products;
 }
