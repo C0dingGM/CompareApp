@@ -48,13 +48,13 @@ export default function HomePage() {
 
   return (
     <div>
-      <h1>CompareApp</h1>
-      <p>Search products, compare prices, view history, add to wishlist.</p>
-      <div style={{ margin: '12px 0' }}>
-        <a href="/products"><button>View all products</button></a>
+      <h1 className="gradient-title" style={{ fontSize: 36, margin: '4px 0 8px' }}>CompareApp</h1>
+      <p className="meta">Search products, compare prices, view history, add to wishlist.</p>
+      <div style={{ margin: '16px 0 20px' }}>
+        <a href="/products" className="button btn-primary">View all products</a>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 520 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 640 }}>
         <form onSubmit={(e) => { e.preventDefault(); search(); }} style={{ position: 'relative', display: 'flex', gap: 8 }}>
           <select value={brand} onChange={(e) => setBrand(e.target.value)}>
             <option value="">All companies</option>
@@ -63,29 +63,32 @@ export default function HomePage() {
             ))}
           </select>
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products" />
-          <button type="submit" onClick={search} disabled={loading || q.trim().length < 1}>Search</button>
+          <button type="submit" onClick={search} disabled={loading || q.trim().length < 1} className="btn-primary">Search</button>
           {q.trim().length >= 1 && (
-            <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 4, border: '1px solid #ddd', borderRadius: 4, background: '#fff', maxHeight: 240, overflowY: 'auto', zIndex: 10 }}>
+            <div className="popover" style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 6, maxHeight: 260, overflowY: 'auto', zIndex: 10 }}>
               {suggestions.length > 0 ? (
                 suggestions.map((p) => (
-                  <a key={p.id} href={`/product/${p.id}`} style={{ display: 'block', padding: 8, borderBottom: '1px solid #eee', textDecoration: 'none', color: 'inherit' }}>
-                    {p.title} — {p.brand}
+                  <a key={p.id} href={`/product/${p.id}`}>
+                    {p.title} — <span className="meta">{p.brand}</span>
                   </a>
                 ))
               ) : (
-                <div style={{ padding: 8, color: '#666' }}>No results</div>
+                <div style={{ padding: 10, color: 'var(--muted)' }}>No results</div>
               )}
             </div>
           )}
         </form>
       </div>
-      <ul>
+      <div className="grid" style={{ marginTop: 16 }}>
         {results.map((p) => (
-          <li key={p.id}>
-            <a href={`/product/${p.id}`}>{p.title}</a> — {p.brand}
-          </li>
+          <div key={p.id} className="card">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <a href={`/product/${p.id}`}>{p.title}</a>
+              <span className="badge">{p.brand}</span>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
