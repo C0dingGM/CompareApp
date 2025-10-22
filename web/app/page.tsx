@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 
+
 export default function HomePage() {
   const [q, setQ] = useState('');
   const [results, setResults] = useState<any[]>([]);
@@ -47,46 +48,52 @@ export default function HomePage() {
   };
 
   return (
-    <div>
-      <h1 className="gradient-title" style={{ fontSize: 36, margin: '4px 0 8px' }}>CompareApp</h1>
-      <p className="meta">Search products, compare prices, view history, add to wishlist.</p>
-      <div style={{ margin: '16px 0 20px' }}>
-        <a href="/products" className="button btn-primary">View all products</a>
-      </div>
+    <div className="space-y-6">
+      {/* Hero */}
+      <section className="rounded-2xl p-8 bg-gradient-to-br from-sky-500/10 via-violet-500/10 to-emerald-500/10 border border-slate-800">
+        <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight mb-2 bg-gradient-to-r from-sky-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">CompareApp</h1>
+        <p className="text-slate-400 max-w-2xl">Search products, compare prices across retailers, and track price history. Clean, fast, and privacy-friendly.</p>
+        <div className="mt-4">
+          <a href="/products" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white transition-colors">View all products</a>
+        </div>
+      </section>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 640 }}>
-        <form onSubmit={(e) => { e.preventDefault(); search(); }} style={{ position: 'relative', display: 'flex', gap: 8 }}>
-          <select value={brand} onChange={(e) => setBrand(e.target.value)}>
+      {/* Search */}
+      <div className="max-w-2xl">
+        <form onSubmit={(e) => { e.preventDefault(); search(); }} className="relative flex gap-2">
+          <select value={brand} onChange={(e) => setBrand(e.target.value)} className="px-3 py-2 rounded-xl border border-slate-700 bg-transparent">
             <option value="">All companies</option>
             {brands.map((b) => (
               <option key={b} value={b}>{b}</option>
             ))}
           </select>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products" />
-          <button type="submit" onClick={search} disabled={loading || q.trim().length < 1} className="btn-primary">Search</button>
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products" className="flex-1 px-3 py-2 rounded-xl border border-slate-700 bg-transparent" />
+          <button type="submit" onClick={search} disabled={loading || q.trim().length < 1} className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white transition-colors disabled:opacity-50">Search</button>
           {q.trim().length >= 1 && (
-            <div className="popover" style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 6, maxHeight: 260, overflowY: 'auto', zIndex: 10 }}>
+            <div className="absolute top-full left-0 right-0 mt-2 rounded-xl border border-slate-800 bg-card/60 backdrop-blur p-1 max-h-72 overflow-y-auto shadow-xl">
               {suggestions.length > 0 ? (
                 suggestions.map((p) => (
-                  <a key={p.id} href={`/product/${p.id}`}>
-                    {p.title} — <span className="meta">{p.brand}</span>
+                  <a key={p.id} href={`/product/${p.id}`} className="block px-3 py-2 rounded-lg hover:bg-white/5">
+                    {p.title} — <span className="text-slate-400">{p.brand}</span>
                   </a>
                 ))
               ) : (
-                <div style={{ padding: 10, color: 'var(--muted)' }}>No results</div>
+                <div className="px-3 py-2 text-slate-400">No results</div>
               )}
             </div>
           )}
         </form>
       </div>
-      <div className="grid" style={{ marginTop: 16 }}>
+
+      {/* Results */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         {results.map((p) => (
-          <div key={p.id} className="card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <a href={`/product/${p.id}`}>{p.title}</a>
-              <span className="badge">{p.brand}</span>
+          <a key={p.id} href={`/product/${p.id}`} className="block rounded-2xl border border-slate-800 p-4 bg-card/60 backdrop-blur transition-transform hover:scale-[1.02]">
+            <div className="flex items-center justify-between">
+              <div className="font-medium">{p.title}</div>
+              <span className="text-xs px-2 py-1 rounded-full border border-violet-500/40 bg-violet-500/10 text-violet-200">{p.brand}</span>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>
