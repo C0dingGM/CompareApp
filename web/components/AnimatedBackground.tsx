@@ -170,7 +170,7 @@ export default function AnimatedBackground() {
                   </div>
                   <input name="q" placeholder="Search products, categories or brands…" style={{width:'100%',height:'48px',padding:'10px 14px 10px 42px',borderRadius:'10px',border:'none',outline:'none',fontSize:'16px',background:'rgba(255,255,255,0.03)',color:'#eaf2ff',boxShadow:'inset 0 -1px 0 rgba(255,255,255,0.02)'}} />
                 </div>
-                <button type="submit" form="svg-search-form" style={{height:'48px',padding:'0 18px',borderRadius:'10px',border:'none',background:'#6b4bff',color:'#fff',fontWeight:600,cursor:'pointer',fontSize:'15px'}}>Search</button>
+                <button type="submit" style={{height:'48px',padding:'0 18px',borderRadius:'10px',border:'none',background:'#6b4bff',color:'#fff',fontWeight:600,cursor:'pointer',fontSize:'15px'}}>Search</button>
               </div>
             </div>
           </foreignObject>
