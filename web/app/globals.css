@@ -69,3 +69,10 @@ body {
 .card:hover { transform: translateY(-2px); border-color: #374151; box-shadow: 0 12px 28px rgba(0,0,0,0.32); }
 .meta { color: var(--muted); font-size: 12px; }
 .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(99,102,241,0.15); color: #c7d2fe; border: 1px solid rgba(99,102,241,0.35); font-size: 12px; }
+
+
+
+/* Animated gradient title */
+.animated-title { background-size: 200% 200%; animation: gradientShift 12s ease infinite; }
+@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+.glow-title { text-shadow: 0 2px 18px rgba(56,189,248,0.15), 0 2px 22px rgba(167,139,250,0.12), 0 2px 26px rgba(52,211,153,0.12); }

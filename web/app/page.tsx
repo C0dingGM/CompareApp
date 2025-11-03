@@ -67,7 +67,7 @@ export default function HomePage() {
       {/* Hero with centered title and search */}
       <section className="min-h-screen flex items-center justify-center">
         <div className="w-full max-w-3xl text-center rounded-2xl p-8 bg-gradient-to-br from-sky-500/10 via-violet-500/10 to-emerald-500/10 border border-slate-800">
-          <h1 className="text-6xl sm:text-7xl md:text-8xl font-extrabold leading-tight mb-4 bg-gradient-to-r from-sky-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">CompareApp</h1>
+          <h1 className="text-6xl sm:text-7xl md:text-8xl font-extrabold leading-tight mb-6 bg-gradient-to-r from-sky-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent animated-title glow-title tracking-tight">CompareApp</h1>
           <p className="text-slate-400 max-w-2xl mx-auto mb-6">Search products, compare prices across retailers, and track price history. Clean, fast, and privacy-friendly.</p>
           <form onSubmit={(e) => { e.preventDefault(); search(); }} className="relative mx-auto flex items-center gap-2 max-w-2xl">
             <select value={brand} onChange={(e) => setBrand(e.target.value)} className="px-3 py-2 rounded-xl border border-slate-700 bg-transparent">
