@@ -26,19 +26,19 @@ export default function AnimatedBackground() {
         {/* clouds */}
         <g filter="url(#ab-blur)" opacity="0.35">
           <g transform="translate(-200,80)">
-            <animateTransform attributeName="transform" type="translate" values="0,0; 80,0; 0,0" dur="60s" repeatCount="indefinite" additive="sum" />
+            <animateTransform attributeName="transform" type="translate" values="0,0; 80,0; 0,0" dur="45s" repeatCount="indefinite" additive="sum" />
             <circle cx="200" cy="80" r="80" fill="#94a3b8" />
             <circle cx="270" cy="90" r="60" fill="#94a3b8" />
             <circle cx="140" cy="100" r="50" fill="#94a3b8" />
           </g>
           <g transform="translate(1000,140) scale(1.2)">
-            <animateTransform attributeName="transform" type="translate" values="-40,0; 40,0; -40,0" dur="80s" repeatCount="indefinite" additive="sum" />
+            <animateTransform attributeName="transform" type="translate" values="-40,0; 40,0; -40,0" dur="60s" repeatCount="indefinite" additive="sum" />
             <circle cx="200" cy="80" r="70" fill="#94a3b8" />
             <circle cx="260" cy="90" r="50" fill="#94a3b8" />
             <circle cx="140" cy="100" r="45" fill="#94a3b8" />
           </g>
           <g transform="translate(300,200) scale(0.9)">
-            <animateTransform attributeName="transform" type="translate" values="-30,0; 30,0; -30,0" dur="70s" repeatCount="indefinite" additive="sum" />
+            <animateTransform attributeName="transform" type="translate" values="-30,0; 30,0; -30,0" dur="55s" repeatCount="indefinite" additive="sum" />
             <circle cx="200" cy="80" r="60" fill="#94a3b8" />
             <circle cx="260" cy="90" r="45" fill="#94a3b8" />
             <circle cx="140" cy="100" r="40" fill="#94a3b8" />
@@ -96,17 +96,17 @@ export default function AnimatedBackground() {
         {/* floating price tags */}
         <g className="ab-tags" opacity="0.8">
           <g className="ab-tag" transform="translate(260,560)">
-            <animateTransform attributeName="transform" type="translate" values="0,0; 0,-12; 0,0" dur="10s" repeatCount="indefinite" />
+            <animateTransform attributeName="transform" type="translate" values="0,0; 60,-10; 140,0; 80,16; 0,0" dur="20s" repeatCount="indefinite" additive="sum" />
             <rect x="-20" y="-10" rx="6" ry="6" width="48" height="22" fill="#0ea5e9" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#03111f">$24</text>
           </g>
           <g className="ab-tag" transform="translate(760,520)">
-            <animateTransform attributeName="transform" type="translate" values="0,0; 0,-12; 0,0" dur="12s" repeatCount="indefinite" />
+            <animateTransform attributeName="transform" type="translate" values="0,0; 80,-14; 160,6; 120,20; 40,-4; 0,0" dur="24s" repeatCount="indefinite" additive="sum" />
             <rect x="-20" y="-10" rx="6" ry="6" width="54" height="22" fill="#8b5cf6" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#100a1f">$19</text>
           </g>
           <g className="ab-tag" transform="translate(1120,560)">
-            <animateTransform attributeName="transform" type="translate" values="0,0; 0,-12; 0,0" dur="14s" repeatCount="indefinite" />
+            <animateTransform attributeName="transform" type="translate" values="0,0; 70,-8; 140,12; 90,24; 0,10; -20,0; 0,0" dur="28s" repeatCount="indefinite" additive="sum" />
             <rect x="-20" y="-10" rx="6" ry="6" width="52" height="22" fill="#34d399" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#052012">$31</text>
           </g>
