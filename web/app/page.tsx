@@ -15,6 +15,19 @@ export default function HomePage() {
     fetch('/api/brands').then(r => r.json()).then(j => setBrands(j.items || [])).catch(() => {});
   }, []);
 
+
+  // read ?q= from URL on load to prefill and trigger search
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const initial = params.get('q');
+      if (initial && initial.trim().length > 0) {
+        setQ(initial);
+        setTimeout(() => { search(); }, 0);
+      }
+    } catch {}
+  }, []);
+
   // live suggestions as user types (debounced)
   useEffect(() => {
     if (!q || q.trim().length < 1) {
