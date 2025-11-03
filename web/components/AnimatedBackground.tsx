@@ -162,7 +162,8 @@ export default function AnimatedBackground() {
         {/* centered search via foreignObject */}
         <g pointerEvents="auto">
           <foreignObject x="270" y="382" width="900" height="96">
-            <div style={{display:'flex',alignItems:'center',justifyContent:'center',width:'100%',height:'100%'}}>
+            {/* @ts-ignore: XHTML namespace for foreignObject content */}
+            <div xmlns="http://www.w3.org/1999/xhtml" style={{display:'flex',alignItems:'center',justifyContent:'center',width:'100%',height:'100%'}}>
               <div style={{display:'flex',alignItems:'center',gap:'12px',padding:'8px',borderRadius:'14px',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)',backdropFilter:'blur(10px)',width:'100%',maxWidth:'840px'}}>
                 <div style={{position:'relative',flex:1}}>
                   <div style={{position:'absolute',left:'10px',top:'10px',width:'24px',height:'24px',display:'flex',alignItems:'center',justifyContent:'center'}}>
