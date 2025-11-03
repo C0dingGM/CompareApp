@@ -13,13 +13,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className={`${inter.className} min-h-screen bg-hero [background-size:32px_32px,32px_32px,auto,auto,auto]`}> 
         <QueryProvider>
           <div className="max-w-5xl mx-auto px-4 py-4">
-            <header className="flex items-center justify-between mb-6">
-              <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-sky-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">CompareApp</Link>
-              <nav className="flex items-center gap-2">
-                <a href="/" className="px-3 py-2 rounded-lg border border-slate-700 hover:border-slate-500 transition-colors">Home</a>
-                <a href="/products" className="px-3 py-2 rounded-lg border border-slate-700 hover:border-slate-500 transition-colors">Products</a>
-                <a href="https://github.com/C0dingGM/CompareApp" target="_blank" rel="noreferrer" className="px-3 py-2 rounded-lg border border-slate-700 hover:border-slate-500 transition-colors">GitHub</a>
-                {/* ThemeToggle */}
+            <header className="flex items-center justify-between mb-6 rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur supports-[backdrop-filter]:bg-slate-900/30">
+              <Link href="/" className="px-4 py-3 text-2xl font-bold bg-gradient-to-r from-sky-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">CompareApp</Link>
+              <nav className="flex items-center gap-1 sm:gap-2 px-2">
+                <Link href="/" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">Home</Link>
+                <Link href="/products" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">Products</Link>
+                <a href="https://github.com/C0dingGM/CompareApp" target="_blank" rel="noreferrer" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">GitHub</a>
+                <span className="mx-1 h-6 w-px bg-slate-700/60" aria-hidden="true" />
+                <ThemeToggle />
               </nav>
             </header>
             {children}

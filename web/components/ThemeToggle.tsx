@@ -26,9 +26,9 @@ export default function ThemeToggle() {
     localStorage.setItem('theme', next ? 'dark' : 'light');
   };
   return (
-    <button onClick={toggle} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-700 hover:border-slate-500 transition-colors">
-      {dark ? <Sun size={18} /> : <Moon size={18} />}
-      <span className="text-sm">{dark ? 'Light' : 'Dark'}</span>
+    <button onClick={toggle} className="inline-flex items-center gap-2 px-2.5 py-2 rounded-md border border-slate-700/60 hover:border-slate-500/60 hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">
+      {dark ? <Sun /> : <Moon />}
+      <span className="text-xs sm:text-sm">{dark ? 'Light' : 'Dark'}</span>
     </button>
   );
 }
