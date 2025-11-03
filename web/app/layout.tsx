@@ -4,6 +4,7 @@ import QueryProvider from './providers';
 import ThemeToggle from '../components/ThemeToggle';
 import HeaderSearch from '../components/HeaderSearch';
 import AnimatedBackground from '../components/AnimatedBackground';
+import CenterSearchOverlay from '../components/CenterSearchOverlay';
 
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className="bg-white text-slate-900 dark:bg-bg dark:text-slate-100 antialiased">
       <body className={`${inter.className} min-h-screen bg-hero [background-size:32px_32px,32px_32px,auto,auto,auto]`}> 
         <AnimatedBackground />
+        <CenterSearchOverlay />
         <QueryProvider>
           <div className="relative z-10 max-w-5xl mx-auto px-4 py-4">
             <header className="sticky top-4 z-50 mb-6 grid grid-cols-[auto,1fr,auto] items-center rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur supports-[backdrop-filter]:bg-slate-900/30">
