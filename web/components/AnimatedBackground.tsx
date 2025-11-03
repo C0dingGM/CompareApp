@@ -95,18 +95,18 @@ export default function AnimatedBackground() {
 
         {/* floating price tags */}
         <g className="ab-tags" opacity="0.8">
-          <g className="ab-tag" transform="translate(260,560)">
-            <animateTransform attributeName="transform" type="translate" values="0,0; 60,-10; 140,0; 80,16; 0,0" dur="20s" repeatCount="indefinite" additive="sum" />
+          <g className="ab-tag">
+            <animateTransform attributeName="transform" type="translate" values="260,560; 320,550; 400,560; 340,576; 260,560" dur="20s" repeatCount="indefinite" />
             <rect x="-20" y="-10" rx="6" ry="6" width="48" height="22" fill="#0ea5e9" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#03111f">$24</text>
           </g>
-          <g className="ab-tag" transform="translate(760,520)">
-            <animateTransform attributeName="transform" type="translate" values="0,0; 80,-14; 160,6; 120,20; 40,-4; 0,0" dur="24s" repeatCount="indefinite" additive="sum" />
+          <g className="ab-tag">
+            <animateTransform attributeName="transform" type="translate" values="760,520; 840,506; 920,526; 880,540; 800,516; 760,520" dur="24s" repeatCount="indefinite" />
             <rect x="-20" y="-10" rx="6" ry="6" width="54" height="22" fill="#8b5cf6" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#100a1f">$19</text>
           </g>
-          <g className="ab-tag" transform="translate(1120,560)">
-            <animateTransform attributeName="transform" type="translate" values="0,0; 70,-8; 140,12; 90,24; 0,10; -20,0; 0,0" dur="28s" repeatCount="indefinite" additive="sum" />
+          <g className="ab-tag">
+            <animateTransform attributeName="transform" type="translate" values="1120,560; 1190,552; 1260,572; 1210,584; 1120,570; 1100,560; 1120,560" dur="28s" repeatCount="indefinite" />
             <rect x="-20" y="-10" rx="6" ry="6" width="52" height="22" fill="#34d399" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#052012">$31</text>
           </g>
