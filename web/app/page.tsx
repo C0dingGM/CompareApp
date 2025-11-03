@@ -8,11 +8,13 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [brand, setBrand] = useState('');
+  const [category, setCategory] = useState('');
 
-  // load brands
+  // load brands + categories
   useEffect(() => {
-    fetch('/api/brands').then(r => r.json()).then(j => setBrands(j.items || [])).catch(() => {});
+    fetch('/api/brands').then(r => r.json()).then(j => { setBrands(j.items || []); setCategories(j.categories || []); }).catch(() => {});
   }, []);
 
 
@@ -37,7 +39,7 @@ export default function HomePage() {
     const ac = new AbortController();
     const t = setTimeout(async () => {
       try {
-        const url = `/api/search?q=${encodeURIComponent(q)}${brand ? `&brand=${encodeURIComponent(brand)}` : ''}`;
+        const url = `/api/search?q=${encodeURIComponent(q)}${brand ? `&brand=${encodeURIComponent(brand)}` : ''}${category ? `&category=${encodeURIComponent(category)}` : ''}`;
         const res = await fetch(url, { signal: ac.signal });
         const json = await res.json();
         setSuggestions(json.items);
@@ -52,7 +54,7 @@ export default function HomePage() {
   const search = async () => {
     if (q.trim().length < 1) return;
     setLoading(true);
-    const url = `/api/search?q=${encodeURIComponent(q)}${brand ? `&brand=${encodeURIComponent(brand)}` : ''}`;
+    const url = `/api/search?q=${encodeURIComponent(q)}${brand ? `&brand=${encodeURIComponent(brand)}` : ''}${category ? `&category=${encodeURIComponent(category)}` : ''}`;
     const res = await fetch(url);
     const json = await res.json();
     setResults(json.items);
@@ -72,6 +74,12 @@ export default function HomePage() {
               <option value="">All companies</option>
               {brands.map((b) => (
                 <option key={b} value={b}>{b}</option>
+              ))}
+            </select>
+            <select value={category} onChange={(e) => setCategory(e.target.value)} className="px-3 py-2 rounded-xl border border-slate-700 bg-transparent">
+              <option value="">All categories</option>
+              {categories.map((c) => (
+                <option key={c} value={c}>{c}</option>
               ))}
             </select>
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products" className="flex-1 px-3 py-2 rounded-xl border border-slate-700 bg-transparent" />
