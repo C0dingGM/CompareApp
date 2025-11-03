@@ -1,36 +1,45 @@
 "use client";
-import { useRef, useState, useEffect } from 'react';
-
+import { useRef, useState, useEffect } from "react";
 
 export default function AnimatedBackground() {
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const [drag, setDrag] = useState<{i:number,startX:number,startY:number,ox:number,oy:number}|null>(null);
-  const initial = [{x:260,y:560},{x:760,y:520},{x:1120,y:560}];
-  const [offsets, setOffsets] = useState<{x:number,y:number}[]>(initial);
-  const velRef = useRef<{vx:number,vy:number}[]>([
-    {vx:0,vy:0},{vx:0,vy:0},{vx:0,vy:0}
+  const [drag, setDrag] = useState<{ i: number; startX: number; startY: number; ox: number; oy: number } | null>(null);
+  const initial = [
+    { x: 260, y: 560 },
+    { x: 760, y: 520 },
+    { x: 1120, y: 560 },
+  ];
+  const [offsets, setOffsets] = useState<{ x: number; y: number }[]>(initial);
+  const velRef = useRef<{ vx: number; vy: number }[]>([
+    { vx: 0, vy: 0 },
+    { vx: 0, vy: 0 },
+    { vx: 0, vy: 0 },
   ]);
-  const dragTrackRef = useRef<{i:number,lastX:number,lastY:number,lastT:number}|null>(null);
-  const inertiaIdsRef = useRef<(number|null)[]>([null,null,null]);
+  const dragTrackRef = useRef<{ i: number; lastX: number; lastY: number; lastT: number } | null>(null);
+  const inertiaIdsRef = useRef<(number | null)[]>([null, null, null]);
 
-  const startInertia = (i:number) => {
+  const startInertia = (i: number) => {
     let vx = velRef.current[i].vx;
     let vy = velRef.current[i].vy;
     const min = 0.02;
     const friction = 0.9;
     let last = performance.now();
 
-    const step = (now:number) => {
-      const dt = now - last; last = now;
-      const decay = Math.pow(friction, dt/16);
-      vx *= decay; vy *= decay;
+    const step = (now: number) => {
+      const dt = now - last;
+      last = now;
+      const decay = Math.pow(friction, dt / 16);
+      vx *= decay;
+      vy *= decay;
       if (Math.hypot(vx, vy) < min) {
         if (inertiaIdsRef.current[i]) cancelAnimationFrame(inertiaIdsRef.current[i]!);
         inertiaIdsRef.current[i] = null;
-        try { localStorage.setItem('ab_tag_offsets', JSON.stringify(offsets)); } catch {}
+        try {
+          localStorage.setItem("ab_tag_offsets", JSON.stringify(offsets));
+        } catch {}
         return;
       }
-      setOffsets(prev => {
+      setOffsets((prev) => {
         const next = [...prev];
         next[i] = { x: next[i].x + vx * dt, y: next[i].y + vy * dt };
         return next;
@@ -41,10 +50,9 @@ export default function AnimatedBackground() {
     inertiaIdsRef.current[i] = requestAnimationFrame(step);
   };
 
-
   useEffect(() => {
     try {
-      const raw = localStorage.getItem('ab_tag_offsets');
+      const raw = localStorage.getItem("ab_tag_offsets");
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length === 3) setOffsets(parsed);
@@ -53,13 +61,14 @@ export default function AnimatedBackground() {
       }
     } catch {}
   }, []);
-  const onDown = (i:number) => (e: any) => {
+
+  const onDown = (i: number) => (e: any) => {
     setDrag({ i, startX: e.clientX, startY: e.clientY, ox: offsets[i].x, oy: offsets[i].y });
     dragTrackRef.current = { i, lastX: e.clientX, lastY: e.clientY, lastT: performance.now() };
     velRef.current[i] = { vx: 0, vy: 0 };
-    // @ts-ignore
     e.currentTarget.setPointerCapture?.(e.pointerId);
   };
+
   const onMove = (e: any) => {
     if (!drag || !svgRef.current) return;
     const rect = svgRef.current.getBoundingClientRect();
@@ -67,8 +76,9 @@ export default function AnimatedBackground() {
     const scaleY = 900 / rect.height;
     const dx = (e.clientX - drag.startX) * scaleX;
     const dy = (e.clientY - drag.startY) * scaleY;
-    setOffsets(prev => prev.map((o, idx) => idx === drag.i ? { x: drag.ox + dx, y: drag.oy + dy } : o));
-    // track velocity
+    setOffsets((prev) =>
+      prev.map((o, idx) => (idx === drag.i ? { x: drag.ox + dx, y: drag.oy + dy } : o))
+    );
     if (dragTrackRef.current) {
       const dt = Math.max(1, performance.now() - dragTrackRef.current.lastT);
       const vx = ((e.clientX - dragTrackRef.current.lastX) * scaleX) / dt;
@@ -79,22 +89,43 @@ export default function AnimatedBackground() {
       dragTrackRef.current.lastT = performance.now();
     }
   };
+
   const onUp = () => {
     if (drag) startInertia(drag.i);
     setDrag(null);
-    try { localStorage.setItem('ab_tag_offsets', JSON.stringify(offsets)); } catch {}
+    try {
+      localStorage.setItem("ab_tag_offsets", JSON.stringify(offsets));
+    } catch {}
   };
 
   return (
     <div className="fixed inset-0 z-30 overflow-hidden">
-      <svg ref={svgRef} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} viewBox="0 0 1440 900" preserveAspectRatio="none" className="w-full h-full">
+      <svg
+        ref={svgRef}
+        onPointerMove={onMove}
+        onPointerUp={onUp}
+        onPointerCancel={onUp}
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="none"
+        className="w-full h-full"
+      >
         <defs>
           <linearGradient id="ab-grad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.15">
-              <animate attributeName="stop-color" values="#0ea5e9;#8b5cf6;#f97316;#0ea5e9" dur="30s" repeatCount="indefinite" />
+              <animate
+                attributeName="stop-color"
+                values="#0ea5e9;#8b5cf6;#f97316;#0ea5e9"
+                dur="30s"
+                repeatCount="indefinite"
+              />
             </stop>
             <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.15">
-              <animate attributeName="stop-color" values="#8b5cf6;#f97316;#0ea5e9;#8b5cf6" dur="30s" repeatCount="indefinite" />
+              <animate
+                attributeName="stop-color"
+                values="#8b5cf6;#f97316;#0ea5e9;#8b5cf6"
+                dur="30s"
+                repeatCount="indefinite"
+              />
             </stop>
           </linearGradient>
           <filter id="ab-blur" x="-20%" y="-20%" width="140%" height="140%">
@@ -104,25 +135,47 @@ export default function AnimatedBackground() {
             <feGaussianBlur stdDeviation="8" />
           </filter>
         </defs>
+
         {/* gradient backdrop */}
         <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" pointerEvents="none" />
 
         {/* clouds */}
         <g filter="url(#ab-blur)" opacity="0.35" pointerEvents="none">
           <g transform="translate(-200,80)">
-            <animateTransform attributeName="transform" type="translate" values="0,0; 80,0; 0,0" dur="45s" repeatCount="indefinite" additive="sum" />
+            <animateTransform
+              attributeName="transform"
+              type="translate"
+              values="0,0; 80,0; 0,0"
+              dur="45s"
+              repeatCount="indefinite"
+              additive="sum"
+            />
             <circle cx="200" cy="80" r="80" fill="#94a3b8" />
             <circle cx="270" cy="90" r="60" fill="#94a3b8" />
             <circle cx="140" cy="100" r="50" fill="#94a3b8" />
           </g>
           <g transform="translate(1000,140) scale(1.2)">
-            <animateTransform attributeName="transform" type="translate" values="-40,0; 40,0; -40,0" dur="60s" repeatCount="indefinite" additive="sum" />
+            <animateTransform
+              attributeName="transform"
+              type="translate"
+              values="-40,0; 40,0; -40,0"
+              dur="60s"
+              repeatCount="indefinite"
+              additive="sum"
+            />
             <circle cx="200" cy="80" r="70" fill="#94a3b8" />
             <circle cx="260" cy="90" r="50" fill="#94a3b8" />
             <circle cx="140" cy="100" r="45" fill="#94a3b8" />
           </g>
           <g transform="translate(300,200) scale(0.9)">
-            <animateTransform attributeName="transform" type="translate" values="-30,0; 30,0; -30,0" dur="55s" repeatCount="indefinite" additive="sum" />
+            <animateTransform
+              attributeName="transform"
+              type="translate"
+              values="-30,0; 30,0; -30,0"
+              dur="55s"
+              repeatCount="indefinite"
+              additive="sum"
+            />
             <circle cx="200" cy="80" r="60" fill="#94a3b8" />
             <circle cx="260" cy="90" r="45" fill="#94a3b8" />
             <circle cx="140" cy="100" r="40" fill="#94a3b8" />
@@ -149,7 +202,7 @@ export default function AnimatedBackground() {
           {/* twinkling windows */}
           <g className="ab-twinkles">
             {Array.from({ length: 28 }).map((_, i) => {
-              const x = 60 + (i * 46) % 1360;
+              const x = 60 + ((i * 46) % 1360);
               const y = 10 + ((i * 23) % 140);
               const d = 2 + (i % 3);
               return <rect key={i} x={x} y={y} width={d} height={d} fill="#fbbf24" opacity="0.6" className={`tw-${i % 7}`} />;
@@ -158,32 +211,97 @@ export default function AnimatedBackground() {
 
           {/* glowing shop signs */}
           <g filter="url(#ab-soft)">
-
-        {/* centered search via foreignObject */}
-        <g pointerEvents="auto">
-          <foreignObject x="270" y="382" width="900" height="96">
-            {/* @ts-ignore: XHTML namespace for foreignObject content */}
-            <div xmlns="http://www.w3.org/1999/xhtml" style={{display:'flex',alignItems:'center',justifyContent:'center',width:'100%',height:'100%'}}>
-              <div style={{display:'flex',alignItems:'center',gap:'12px',padding:'8px',borderRadius:'14px',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)',backdropFilter:'blur(10px)',width:'100%',maxWidth:'840px'}}>
-                <div style={{position:'relative',flex:1}}>
-                  <div style={{position:'absolute',left:'10px',top:'10px',width:'24px',height:'24px',display:'flex',alignItems:'center',justifyContent:'center'}}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#90e0ff" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 20.49 21.49 19l-5.99-5zM4 9.5C4 6.46 6.46 4 9.5 4S15 6.46 15 9.5 12.54 15 9.5 15 4 12.54 4 9.5Z"/></svg>
-                  </div>
-                  <input name="q" placeholder="Search products, categories or brands…" style={{width:'100%',height:'48px',padding:'10px 14px 10px 42px',borderRadius:'10px',border:'none',outline:'none',fontSize:'16px',background:'rgba(255,255,255,0.03)',color:'#eaf2ff',boxShadow:'inset 0 -1px 0 rgba(255,255,255,0.02)'}} />
-                </div>
-                <button type="submit" style={{height:'48px',padding:'0 18px',borderRadius:'10px',border:'none',background:'#6b4bff',color:'#fff',fontWeight:600,cursor:'pointer',fontSize:'15px'}}>Search</button>
-              </div>
-            </div>
-          </foreignObject>
-        </g>
-
             <rect x="300" y="120" rx="4" ry="4" width="60" height="16" fill="#22d3ee" opacity="0.7" />
             <rect x="740" y="90" rx="4" ry="4" width="70" height="16" fill="#a78bfa" opacity="0.7" />
             <rect x="1120" y="110" rx="4" ry="4" width="58" height="16" fill="#34d399" opacity="0.7" />
           </g>
         </g>
 
-        {/* data lines with moving dashes */}
+        {/* ✅ Search bar centered (moved out of filtered group) */}
+        <g pointerEvents="auto">
+          <foreignObject x="270" y="382" width="900" height="96">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "8px",
+                  borderRadius: "14px",
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  backdropFilter: "blur(10px)",
+                  width: "100%",
+                  maxWidth: "840px",
+                }}
+              >
+                <div style={{ position: "relative", flex: 1 }}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "10px",
+                      top: "10px",
+                      width: "24px",
+                      height: "24px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        fill="#90e0ff"
+                        d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 20.49 21.49 19l-5.99-5zM4 9.5C4 6.46 6.46 4 9.5 4S15 6.46 15 9.5 12.54 15 9.5 15 4 12.54 4 9.5Z"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    name="q"
+                    placeholder="Search products, categories or brands…"
+                    style={{
+                      width: "100%",
+                      height: "48px",
+                      padding: "10px 14px 10px 42px",
+                      borderRadius: "10px",
+                      border: "none",
+                      outline: "none",
+                      fontSize: "16px",
+                      background: "rgba(255,255,255,0.03)",
+                      color: "#eaf2ff",
+                      boxShadow: "inset 0 -1px 0 rgba(255,255,255,0.02)",
+                    }}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  style={{
+                    height: "48px",
+                    padding: "0 18px",
+                    borderRadius: "10px",
+                    border: "none",
+                    background: "#6b4bff",
+                    color: "#fff",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    fontSize: "15px",
+                  }}
+                >
+                  Search
+                </button>
+              </div>
+            </div>
+          </foreignObject>
+        </g>
+
+        {/* data lines */}
         <g stroke="#22d3ee" strokeWidth="2" fill="none" opacity="0.5" pointerEvents="none">
           <path className="ab-line" d="M220 640 C 420 560, 720 720, 960 660">
             <animate attributeName="stroke-dashoffset" values="0;-2000" dur="8s" repeatCount="indefinite" />
@@ -197,42 +315,67 @@ export default function AnimatedBackground() {
         </g>
 
         {/* floating price tags */}
-        <g className="ab-tags" opacity="0.8" style={{ pointerEvents: 'auto' }}>
-          <g transform={`translate(${offsets[0].x} ${offsets[0].y})`} onPointerDown={onDown(0)} style={{ cursor: 'grab' }}>
-            <g>
-              <animateTransform attributeName="transform" type="translate" values="0 0; 40 -10; 80 0; 48 12; 0 0" dur="20s" repeatCount="indefinite" />
-              <rect x="-20" y="-10" rx="6" ry="6" width="48" height="22" fill="#0ea5e9" opacity="0.9" />
-              <text x="4" y="6" fontSize="12" fill="#03111f">$24</text>
+        <g className="ab-tags" opacity="0.8" style={{ pointerEvents: "auto" }}>
+          {offsets.map((pos, i) => (
+            <g
+              key={i}
+              transform={`translate(${pos.x} ${pos.y})`}
+              onPointerDown={onDown(i)}
+              style={{ cursor: "grab" }}
+            >
+              <rect
+                x="-20"
+                y="-10"
+                rx="6"
+                ry="6"
+                width="52"
+                height="22"
+                fill={["#0ea5e9", "#8b5cf6", "#34d399"][i]}
+                opacity="0.9"
+              />
+              <text x="4" y="6" fontSize="12" fill={["#03111f", "#100a1f", "#052012"][i]}>
+                {["$24", "$19", "$31"][i]}
+              </text>
             </g>
-          </g>
-          <g transform={`translate(${offsets[1].x} ${offsets[1].y})`} onPointerDown={onDown(1)} style={{ cursor: 'grab' }}>
-            <g>
-              <animateTransform attributeName="transform" type="translate" values="0 0; 50 -12; 90 6; 60 18; 10 -4; 0 0" dur="24s" repeatCount="indefinite" />
-              <rect x="-20" y="-10" rx="6" ry="6" width="54" height="22" fill="#8b5cf6" opacity="0.9" />
-              <text x="4" y="6" fontSize="12" fill="#100a1f">$19</text>
-            </g>
-          </g>
-          <g transform={`translate(${offsets[2].x} ${offsets[2].y})`} onPointerDown={onDown(2)} style={{ cursor: 'grab' }}>
-            <g>
-              <animateTransform attributeName="transform" type="translate" values="0 0; 60 -8; 120 12; 80 24; 0 10; -20 0; 0 0" dur="28s" repeatCount="indefinite" />
-              <rect x="-20" y="-10" rx="6" ry="6" width="52" height="22" fill="#34d399" opacity="0.9" />
-              <text x="4" y="6" fontSize="12" fill="#052012">$31</text>
-            </g>
-          </g>
+          ))}
         </g>
       </svg>
 
       <style jsx>{`
-        .ab-line { stroke-dasharray: 6 10; }
+        .ab-line {
+          stroke-dasharray: 6 10;
+        }
 
-        .ab-twinkles rect { animation: twinkle 3s ease-in-out infinite; }
-        .ab-twinkles .tw-1 { animation-delay: .4s }
-        .ab-twinkles .tw-2 { animation-delay: .8s }
-        .ab-twinkles .tw-3 { animation-delay: 1.2s }
-        .ab-twinkles .tw-4 { animation-delay: 1.6s }
-        .ab-twinkles .tw-5 { animation-delay: 2.0s }
-        .ab-twinkles .tw-6 { animation-delay: 2.4s }
-        @keyframes twinkle { 0%,100% { opacity: .15 } 50% { opacity: .7 } }
+        .ab-twinkles rect {
+          animation: twinkle 3s ease-in-out infinite;
+        }
+        .ab-twinkles .tw-1 {
+          animation-delay: 0.4s;
+        }
+        .ab-twinkles .tw-2 {
+          animation-delay: 0.8s;
+        }
+        .ab-twinkles .tw-3 {
+          animation-delay: 1.2s;
+        }
+        .ab-twinkles .tw-4 {
+          animation-delay: 1.6s;
+        }
+        .ab-twinkles .tw-5 {
+          animation-delay: 2s;
+        }
+        .ab-twinkles .tw-6 {
+          animation-delay: 2.4s;
+        }
+        @keyframes twinkle {
+          0%,
+          100% {
+            opacity: 0.15;
+          }
+          50% {
+            opacity: 0.7;
+          }
+        }
       `}</style>
     </div>
   );
