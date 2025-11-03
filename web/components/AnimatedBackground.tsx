@@ -86,7 +86,7 @@ export default function AnimatedBackground() {
   };
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 -z-10 overflow-hidden">
       <svg ref={svgRef} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} viewBox="0 0 1440 900" preserveAspectRatio="none" className="w-full h-full">
         <defs>
           <linearGradient id="ab-grad" x1="0" y1="0" x2="1" y2="1">
@@ -158,6 +158,19 @@ export default function AnimatedBackground() {
 
           {/* glowing shop signs */}
           <g filter="url(#ab-soft)">
+
+        {/* centered search via foreignObject */}
+        <g pointerEvents="auto">
+          <foreignObject x="420" y="320" width="600" height="64">
+            <div style={{display:'flex',justifyContent:'center'}}>
+              <form action="/" method="get" style={{display:'flex',gap:'8px',padding:'10px',borderRadius:'14px',background:'rgba(2,6,23,.55)',border:'1px solid rgba(51,65,85,.6)',backdropFilter:'blur(8px)'}}>
+                <input name="q" placeholder="Search products" style={{flex:1,minWidth:'0',border:'1px solid #1f2937',borderRadius:'10px',background:'#0b1220',color:'#e5e7eb',padding:'8px 10px'}} />
+                <button type="submit" style={{padding:'10px 14px',borderRadius:'10px',background:'#0284c7',color:'#fff',border:'1px solid #0369a1'}}>Search</button>
+              </form>
+            </div>
+          </foreignObject>
+        </g>
+
             <rect x="300" y="120" rx="4" ry="4" width="60" height="16" fill="#22d3ee" opacity="0.7" />
             <rect x="740" y="90" rx="4" ry="4" width="70" height="16" fill="#a78bfa" opacity="0.7" />
             <rect x="1120" y="110" rx="4" ry="4" width="58" height="16" fill="#34d399" opacity="0.7" />
