@@ -33,7 +33,7 @@ export default function CenterSearchOverlay() {
 
   };
   return (
-    <div className="fixed inset-0 z-30 grid place-items-center pointer-events-none">
+    <div className="fixed inset-0 z-[60] grid place-items-center pointer-events-none">
       <form onSubmit={submit} className="pointer-events-auto w-full max-w-xl px-4">
         <div className="rounded-2xl border border-slate-800/70 bg-slate-900/50 backdrop-blur-xl shadow-2xl ring-1 ring-slate-700/40 p-2 flex flex-wrap sm:flex-nowrap items-center gap-2">
           <select value={brand} onChange={(e) => setBrand(e.target.value)} className="px-3 py-2 rounded-xl border border-slate-700 bg-transparent">

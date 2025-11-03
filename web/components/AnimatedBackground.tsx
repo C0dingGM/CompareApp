@@ -86,7 +86,7 @@ export default function AnimatedBackground() {
   };
 
   return (
-    <div className="fixed inset-0 z-10 overflow-hidden">
+    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
       <svg ref={svgRef} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} viewBox="0 0 1440 900" preserveAspectRatio="none" className="w-full h-full">
         <defs>
           <linearGradient id="ab-grad" x1="0" y1="0" x2="1" y2="1">
