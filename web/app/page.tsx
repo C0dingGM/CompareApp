@@ -62,41 +62,39 @@ export default function HomePage() {
 
   return (
     <div className="space-y-6">
-      {/* Hero */}
-      <section className="rounded-2xl p-8 bg-gradient-to-br from-sky-500/10 via-violet-500/10 to-emerald-500/10 border border-slate-800">
-        <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight mb-2 bg-gradient-to-r from-sky-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">CompareApp</h1>
-        <p className="text-slate-400 max-w-2xl">Search products, compare prices across retailers, and track price history. Clean, fast, and privacy-friendly.</p>
-        <div className="mt-4">
-          <a href="/products" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white transition-colors">View all products</a>
+      {/* Hero with centered title and search */}
+      <section className="min-h-[60vh] flex items-center justify-center">
+        <div className="w-full max-w-3xl text-center rounded-2xl p-8 bg-gradient-to-br from-sky-500/10 via-violet-500/10 to-emerald-500/10 border border-slate-800">
+          <h1 className="text-5xl sm:text-6xl font-extrabold leading-tight mb-4 bg-gradient-to-r from-sky-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">CompareApp</h1>
+          <p className="text-slate-400 max-w-2xl mx-auto mb-6">Search products, compare prices across retailers, and track price history. Clean, fast, and privacy-friendly.</p>
+          <form onSubmit={(e) => { e.preventDefault(); search(); }} className="relative mx-auto flex items-center gap-2 max-w-2xl">
+            <select value={brand} onChange={(e) => setBrand(e.target.value)} className="px-3 py-2 rounded-xl border border-slate-700 bg-transparent">
+              <option value="">All companies</option>
+              {brands.map((b) => (
+                <option key={b} value={b}>{b}</option>
+              ))}
+            </select>
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products" className="flex-1 px-3 py-2 rounded-xl border border-slate-700 bg-transparent" />
+            <button type="submit" onClick={search} disabled={loading || q.trim().length < 1} className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white transition-colors disabled:opacity-50">Search</button>
+            {q.trim().length >= 1 && (
+              <div className="absolute top-full left-0 right-0 mt-2 rounded-xl border border-slate-800 bg-card/60 backdrop-blur p-1 max-h-72 overflow-y-auto shadow-xl text-left">
+                {suggestions.length > 0 ? (
+                  suggestions.map((p) => (
+                    <a key={p.id} href={`/product/${p.id}`} className="block px-3 py-2 rounded-lg hover:bg-white/5">
+                      {p.title} — <span className="text-slate-400">{p.brand}</span>
+                    </a>
+                  ))
+                ) : (
+                  <div className="px-3 py-2 text-slate-400">No results</div>
+                )}
+              </div>
+            )}
+          </form>
+          <div className="mt-4">
+            <a href="/products" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white transition-colors">View all products</a>
+          </div>
         </div>
       </section>
-
-      {/* Search */}
-      <div className="max-w-2xl">
-        <form onSubmit={(e) => { e.preventDefault(); search(); }} className="relative flex gap-2">
-          <select value={brand} onChange={(e) => setBrand(e.target.value)} className="px-3 py-2 rounded-xl border border-slate-700 bg-transparent">
-            <option value="">All companies</option>
-            {brands.map((b) => (
-              <option key={b} value={b}>{b}</option>
-            ))}
-          </select>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products" className="flex-1 px-3 py-2 rounded-xl border border-slate-700 bg-transparent" />
-          <button type="submit" onClick={search} disabled={loading || q.trim().length < 1} className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white transition-colors disabled:opacity-50">Search</button>
-          {q.trim().length >= 1 && (
-            <div className="absolute top-full left-0 right-0 mt-2 rounded-xl border border-slate-800 bg-card/60 backdrop-blur p-1 max-h-72 overflow-y-auto shadow-xl">
-              {suggestions.length > 0 ? (
-                suggestions.map((p) => (
-                  <a key={p.id} href={`/product/${p.id}`} className="block px-3 py-2 rounded-lg hover:bg-white/5">
-                    {p.title} — <span className="text-slate-400">{p.brand}</span>
-                  </a>
-                ))
-              ) : (
-                <div className="px-3 py-2 text-slate-400">No results</div>
-              )}
-            </div>
-          )}
-        </form>
-      </div>
 
       {/* Results */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
