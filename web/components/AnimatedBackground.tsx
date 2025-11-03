@@ -1,12 +1,22 @@
 "use client";
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 export default function AnimatedBackground() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [drag, setDrag] = useState<{i:number,startX:number,startY:number,ox:number,oy:number}|null>(null);
-  const [offsets, setOffsets] = useState<{x:number,y:number}[]>([
-    {x:0,y:0}, {x:0,y:0}, {x:0,y:0}
-  ]);
+  const initial = [{x:260,y:560},{x:760,y:520},{x:1120,y:560}];
+  const [offsets, setOffsets] = useState<{x:number,y:number}[]>(initial);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('ab_tag_offsets');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length === 3) setOffsets(parsed);
+      } else {
+        setOffsets(initial);
+      }
+    } catch {}
+  }, []);
   const onDown = (i:number) => (e: any) => {
     setDrag({ i, startX: e.clientX, startY: e.clientY, ox: offsets[i].x, oy: offsets[i].y });
     // @ts-ignore
@@ -21,7 +31,7 @@ export default function AnimatedBackground() {
     const dy = (e.clientY - drag.startY) * scaleY;
     setOffsets(prev => prev.map((o, idx) => idx === drag.i ? { x: drag.ox + dx, y: drag.oy + dy } : o));
   };
-  const onUp = () => setDrag(null);
+  const onUp = () => { setDrag(null); try { localStorage.setItem('ab_tag_offsets', JSON.stringify(offsets)); } catch {} };
 
   return (
     <div className="fixed inset-0 overflow-hidden">
@@ -117,20 +127,26 @@ export default function AnimatedBackground() {
 
         {/* floating price tags */}
         <g className="ab-tags" opacity="0.8" style={{ pointerEvents: 'auto' }}>
-          <g transform={`translate(${offsets[0].x},${offsets[0].y})`} onPointerDown={onDown(0)} style={{ cursor: 'grab' }}>
-            <animateTransform attributeName="transform" type="translate" values="260,560; 320,550; 400,560; 340,576; 260,560" dur="20s" repeatCount="indefinite" />
-            <rect x="-20" y="-10" rx="6" ry="6" width="48" height="22" fill="#0ea5e9" opacity="0.9" />
-            <text x="4" y="6" fontSize="12" fill="#03111f">$24</text>
+          <g transform={`translate(${offsets[0].x} ${offsets[0].y})`} onPointerDown={onDown(0)} style={{ cursor: 'grab' }}>
+            <g>
+              <animateTransform attributeName="transform" type="translate" values="0 0; 40 -10; 80 0; 48 12; 0 0" dur="20s" repeatCount="indefinite" />
+              <rect x="-20" y="-10" rx="6" ry="6" width="48" height="22" fill="#0ea5e9" opacity="0.9" />
+              <text x="4" y="6" fontSize="12" fill="#03111f">$24</text>
+            </g>
           </g>
-          <g transform={`translate(${offsets[1].x},${offsets[1].y})`} onPointerDown={onDown(1)} style={{ cursor: 'grab' }}>
-            <animateTransform attributeName="transform" type="translate" values="760,520; 840,506; 920,526; 880,540; 800,516; 760,520" dur="24s" repeatCount="indefinite" />
-            <rect x="-20" y="-10" rx="6" ry="6" width="54" height="22" fill="#8b5cf6" opacity="0.9" />
-            <text x="4" y="6" fontSize="12" fill="#100a1f">$19</text>
+          <g transform={`translate(${offsets[1].x} ${offsets[1].y})`} onPointerDown={onDown(1)} style={{ cursor: 'grab' }}>
+            <g>
+              <animateTransform attributeName="transform" type="translate" values="0 0; 50 -12; 90 6; 60 18; 10 -4; 0 0" dur="24s" repeatCount="indefinite" />
+              <rect x="-20" y="-10" rx="6" ry="6" width="54" height="22" fill="#8b5cf6" opacity="0.9" />
+              <text x="4" y="6" fontSize="12" fill="#100a1f">$19</text>
+            </g>
           </g>
-          <g transform={`translate(${offsets[2].x},${offsets[2].y})`} onPointerDown={onDown(2)} style={{ cursor: 'grab' }}>
-            <animateTransform attributeName="transform" type="translate" values="1120,560; 1190,552; 1260,572; 1210,584; 1120,570; 1100,560; 1120,560" dur="28s" repeatCount="indefinite" />
-            <rect x="-20" y="-10" rx="6" ry="6" width="52" height="22" fill="#34d399" opacity="0.9" />
-            <text x="4" y="6" fontSize="12" fill="#052012">$31</text>
+          <g transform={`translate(${offsets[2].x} ${offsets[2].y})`} onPointerDown={onDown(2)} style={{ cursor: 'grab' }}>
+            <g>
+              <animateTransform attributeName="transform" type="translate" values="0 0; 60 -8; 120 12; 80 24; 0 10; -20 0; 0 0" dur="28s" repeatCount="indefinite" />
+              <rect x="-20" y="-10" rx="6" ry="6" width="52" height="22" fill="#34d399" opacity="0.9" />
+              <text x="4" y="6" fontSize="12" fill="#052012">$31</text>
+            </g>
           </g>
         </g>
       </svg>
