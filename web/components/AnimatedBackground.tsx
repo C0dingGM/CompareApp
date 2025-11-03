@@ -6,6 +6,39 @@ export default function AnimatedBackground() {
   const [drag, setDrag] = useState<{i:number,startX:number,startY:number,ox:number,oy:number}|null>(null);
   const initial = [{x:260,y:560},{x:760,y:520},{x:1120,y:560}];
   const [offsets, setOffsets] = useState<{x:number,y:number}[]>(initial);
+  const velRef = useRef<{vx:number,vy:number}[]>([
+    {vx:0,vy:0},{vx:0,vy:0},{vx:0,vy:0}
+  ]);
+  const dragTrackRef = useRef<{i:number,lastX:number,lastY:number,lastT:number}|null>(null);
+  const inertiaIdsRef = useRef<(number|null)[]>([null,null,null]);
+
+  const startInertia = (i:number) => {
+    let vx = velRef.current[i].vx;
+    let vy = velRef.current[i].vy;
+    const min = 0.02;
+    const friction = 0.9;
+    let last = performance.now();
+    const step = (now:number) => {
+      const dt = now - last; last = now;
+      const decay = Math.pow(friction, dt/16);
+      vx *= decay; vy *= decay;
+      if (Math.hypot(vx, vy) < min) {
+        if (inertiaIdsRef.current[i]) cancelAnimationFrame(inertiaIdsRef.current[i]!);
+        inertiaIdsRef.current[i] = null;
+        try { localStorage.setItem('ab_tag_offsets', JSON.stringify(offsets)); } catch {}
+        return;
+      }
+      setOffsets(prev => {
+        const next = [...prev];
+        next[i] = { x: next[i].x + vx * dt, y: next[i].y + vy * dt };
+        return next;
+      });
+      inertiaIdsRef.current[i] = requestAnimationFrame(step);
+    };
+    if (inertiaIdsRef.current[i]) cancelAnimationFrame(inertiaIdsRef.current[i]!);
+    inertiaIdsRef.current[i] = requestAnimationFrame(step);
+  };
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem('ab_tag_offsets');
@@ -19,6 +52,8 @@ export default function AnimatedBackground() {
   }, []);
   const onDown = (i:number) => (e: any) => {
     setDrag({ i, startX: e.clientX, startY: e.clientY, ox: offsets[i].x, oy: offsets[i].y });
+    dragTrackRef.current = { i, lastX: e.clientX, lastY: e.clientY, lastT: performance.now() };
+    velRef.current[i] = { vx: 0, vy: 0 };
     // @ts-ignore
     e.currentTarget.setPointerCapture?.(e.pointerId);
   };
@@ -30,8 +65,22 @@ export default function AnimatedBackground() {
     const dx = (e.clientX - drag.startX) * scaleX;
     const dy = (e.clientY - drag.startY) * scaleY;
     setOffsets(prev => prev.map((o, idx) => idx === drag.i ? { x: drag.ox + dx, y: drag.oy + dy } : o));
+    // track velocity
+    if (dragTrackRef.current) {
+      const dt = Math.max(1, performance.now() - dragTrackRef.current.lastT);
+      const vx = ((e.clientX - dragTrackRef.current.lastX) * scaleX) / dt;
+      const vy = ((e.clientY - dragTrackRef.current.lastY) * scaleY) / dt;
+      velRef.current[drag.i] = { vx, vy };
+      dragTrackRef.current.lastX = e.clientX;
+      dragTrackRef.current.lastY = e.clientY;
+      dragTrackRef.current.lastT = performance.now();
+    }
   };
-  const onUp = () => { setDrag(null); try { localStorage.setItem('ab_tag_offsets', JSON.stringify(offsets)); } catch {} };
+  const onUp = () => {
+    if (drag) startInertia(drag.i);
+    setDrag(null);
+    try { localStorage.setItem('ab_tag_offsets', JSON.stringify(offsets)); } catch {}
+  };
 
   return (
     <div className="fixed inset-0 overflow-hidden">
