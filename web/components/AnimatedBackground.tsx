@@ -161,12 +161,17 @@ export default function AnimatedBackground() {
 
         {/* centered search via foreignObject */}
         <g pointerEvents="auto">
-          <foreignObject x="420" y="418" width="600" height="64">
-            <div style={{display:'flex',justifyContent:'center'}}>
-              <form action="/" method="get" style={{display:'flex',gap:'8px',padding:'10px',borderRadius:'14px',background:'rgba(2,6,23,.55)',border:'1px solid rgba(51,65,85,.6)',backdropFilter:'blur(8px)'}}>
-                <input name="q" placeholder="Search products" style={{flex:1,minWidth:'0',border:'1px solid #1f2937',borderRadius:'10px',background:'#0b1220',color:'#e5e7eb',padding:'8px 10px'}} />
-                <button type="submit" style={{padding:'10px 14px',borderRadius:'10px',background:'#0284c7',color:'#fff',border:'1px solid #0369a1'}}>Search</button>
-              </form>
+          <foreignObject x="270" y="382" width="900" height="96">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'center',width:'100%',height:'100%'}}>
+              <div style={{display:'flex',alignItems:'center',gap:'12px',padding:'8px',borderRadius:'14px',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)',backdropFilter:'blur(10px)',width:'100%',maxWidth:'840px'}}>
+                <div style={{position:'relative',flex:1}}>
+                  <div style={{position:'absolute',left:'10px',top:'10px',width:'24px',height:'24px',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#90e0ff" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 20.49 21.49 19l-5.99-5zM4 9.5C4 6.46 6.46 4 9.5 4S15 6.46 15 9.5 12.54 15 9.5 15 4 12.54 4 9.5Z"/></svg>
+                  </div>
+                  <input name="q" placeholder="Search products, categories or brands…" style={{width:'100%',height:'48px',padding:'10px 14px 10px 42px',borderRadius:'10px',border:'none',outline:'none',fontSize:'16px',background:'rgba(255,255,255,0.03)',color:'#eaf2ff',boxShadow:'inset 0 -1px 0 rgba(255,255,255,0.02)'}} />
+                </div>
+                <button type="submit" form="svg-search-form" style={{height:'48px',padding:'0 18px',borderRadius:'10px',border:'none',background:'#6b4bff',color:'#fff',fontWeight:600,cursor:'pointer',fontSize:'15px'}}>Search</button>
+              </div>
             </div>
           </foreignObject>
         </g>
