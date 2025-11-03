@@ -9,8 +9,8 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="bg-white text-slate-900 dark:bg-bg dark:text-slate-100">
-      <body className={`${inter.className} min-h-screen bg-hero`}> 
+    <html lang="en" className="bg-white text-slate-900 dark:bg-bg dark:text-slate-100 antialiased">
+      <body className={`${inter.className} min-h-screen bg-hero [background-size:32px_32px,32px_32px,auto,auto,auto]`}> 
         <QueryProvider>
           <div className="max-w-5xl mx-auto px-4 py-4">
             <header className="flex items-center justify-between mb-6">
