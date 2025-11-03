@@ -25,17 +25,20 @@ export default function AnimatedBackground() {
 
         {/* clouds */}
         <g filter="url(#ab-blur)" opacity="0.35">
-          <g className="ab-cloud" transform="translate(-200,80)">
+          <g transform="translate(-200,80)">
+            <animateTransform attributeName="transform" type="translate" values="0,0; 80,0; 0,0" dur="60s" repeatCount="indefinite" additive="sum" />
             <circle cx="200" cy="80" r="80" fill="#94a3b8" />
             <circle cx="270" cy="90" r="60" fill="#94a3b8" />
             <circle cx="140" cy="100" r="50" fill="#94a3b8" />
           </g>
-          <g className="ab-cloud" transform="translate(1000,140) scale(1.2)">
+          <g transform="translate(1000,140) scale(1.2)">
+            <animateTransform attributeName="transform" type="translate" values="-40,0; 40,0; -40,0" dur="80s" repeatCount="indefinite" additive="sum" />
             <circle cx="200" cy="80" r="70" fill="#94a3b8" />
             <circle cx="260" cy="90" r="50" fill="#94a3b8" />
             <circle cx="140" cy="100" r="45" fill="#94a3b8" />
           </g>
-          <g className="ab-cloud" transform="translate(300,200) scale(0.9)">
+          <g transform="translate(300,200) scale(0.9)">
+            <animateTransform attributeName="transform" type="translate" values="-30,0; 30,0; -30,0" dur="70s" repeatCount="indefinite" additive="sum" />
             <circle cx="200" cy="80" r="60" fill="#94a3b8" />
             <circle cx="260" cy="90" r="45" fill="#94a3b8" />
             <circle cx="140" cy="100" r="40" fill="#94a3b8" />
@@ -79,22 +82,31 @@ export default function AnimatedBackground() {
 
         {/* data lines with moving dashes */}
         <g stroke="#22d3ee" strokeWidth="2" fill="none" opacity="0.5">
-          <path className="ab-line" d="M220 640 C 420 560, 720 720, 960 660" />
-          <path className="ab-line" d="M420 680 C 600 620, 820 600, 1200 640" />
-          <path className="ab-line" d="M140 700 C 360 640, 540 760, 820 720" />
+          <path className="ab-line" d="M220 640 C 420 560, 720 720, 960 660">
+            <animate attributeName="stroke-dashoffset" values="0;-2000" dur="8s" repeatCount="indefinite" />
+          </path>
+          <path className="ab-line" d="M420 680 C 600 620, 820 600, 1200 640" stroke="#a78bfa">
+            <animate attributeName="stroke-dashoffset" values="0;-2000" dur="10s" repeatCount="indefinite" />
+          </path>
+          <path className="ab-line" d="M140 700 C 360 640, 540 760, 820 720" stroke="#34d399">
+            <animate attributeName="stroke-dashoffset" values="0;-2000" dur="12s" repeatCount="indefinite" />
+          </path>
         </g>
 
         {/* floating price tags */}
         <g className="ab-tags" opacity="0.8">
           <g className="ab-tag" transform="translate(260,560)">
+            <animateTransform attributeName="transform" type="translate" values="0,0; 0,-12; 0,0" dur="10s" repeatCount="indefinite" />
             <rect x="-20" y="-10" rx="6" ry="6" width="48" height="22" fill="#0ea5e9" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#03111f">$24</text>
           </g>
           <g className="ab-tag" transform="translate(760,520)">
+            <animateTransform attributeName="transform" type="translate" values="0,0; 0,-12; 0,0" dur="12s" repeatCount="indefinite" />
             <rect x="-20" y="-10" rx="6" ry="6" width="54" height="22" fill="#8b5cf6" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#100a1f">$19</text>
           </g>
           <g className="ab-tag" transform="translate(1120,560)">
+            <animateTransform attributeName="transform" type="translate" values="0,0; 0,-12; 0,0" dur="14s" repeatCount="indefinite" />
             <rect x="-20" y="-10" rx="6" ry="6" width="52" height="22" fill="#34d399" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#052012">$31</text>
           </g>
@@ -102,21 +114,7 @@ export default function AnimatedBackground() {
       </svg>
 
       <style jsx>{`
-        .ab-cloud { animation: drift 60s linear infinite; }
-        .ab-cloud:nth-of-type(2) { animation-duration: 80s; animation-delay: -10s; }
-        .ab-cloud:nth-of-type(3) { animation-duration: 70s; animation-delay: -20s; }
-
-        @keyframes drift { from { transform: translateX(-10%); } to { transform: translateX(10%); } }
-
-        .ab-line { stroke-dasharray: 6 10; animation: dash 8s linear infinite; }
-        .ab-line:nth-of-type(2) { animation-duration: 10s; stroke: #a78bfa; }
-        .ab-line:nth-of-type(3) { animation-duration: 12s; stroke: #34d399; }
-        @keyframes dash { to { stroke-dashoffset: -2000; } }
-
-        .ab-tag { animation: float 10s ease-in-out infinite; }
-        .ab-tag:nth-of-type(2) { animation-duration: 12s; animation-delay: -3s; }
-        .ab-tag:nth-of-type(3) { animation-duration: 14s; animation-delay: -6s; }
-        @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-12px) } }
+        .ab-line { stroke-dasharray: 6 10; }
 
         .ab-twinkles rect { animation: twinkle 3s ease-in-out infinite; }
         .ab-twinkles .tw-1 { animation-delay: .4s }
