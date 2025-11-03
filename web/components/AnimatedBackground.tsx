@@ -1,9 +1,31 @@
 "use client";
+import { useRef, useState } from 'react';
 
 export default function AnimatedBackground() {
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [drag, setDrag] = useState<{i:number,startX:number,startY:number,ox:number,oy:number}|null>(null);
+  const [offsets, setOffsets] = useState<{x:number,y:number}[]>([
+    {x:0,y:0}, {x:0,y:0}, {x:0,y:0}
+  ]);
+  const onDown = (i:number) => (e: any) => {
+    setDrag({ i, startX: e.clientX, startY: e.clientY, ox: offsets[i].x, oy: offsets[i].y });
+    // @ts-ignore
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+  const onMove = (e: any) => {
+    if (!drag || !svgRef.current) return;
+    const rect = svgRef.current.getBoundingClientRect();
+    const scaleX = 1440 / rect.width;
+    const scaleY = 900 / rect.height;
+    const dx = (e.clientX - drag.startX) * scaleX;
+    const dy = (e.clientY - drag.startY) * scaleY;
+    setOffsets(prev => prev.map((o, idx) => idx === drag.i ? { x: drag.ox + dx, y: drag.oy + dy } : o));
+  };
+  const onUp = () => setDrag(null);
+
   return (
-    <div className="pointer-events-none fixed inset-0 overflow-hidden">
-      <svg viewBox="0 0 1440 900" preserveAspectRatio="none" className="w-full h-full">
+    <div className="fixed inset-0 overflow-hidden">
+      <svg ref={svgRef} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} viewBox="0 0 1440 900" preserveAspectRatio="none" className="w-full h-full">
         <defs>
           <linearGradient id="ab-grad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.15">
@@ -21,10 +43,10 @@ export default function AnimatedBackground() {
           </filter>
         </defs>
         {/* gradient backdrop */}
-        <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" />
+        <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" pointerEvents="none" />
 
         {/* clouds */}
-        <g filter="url(#ab-blur)" opacity="0.35">
+        <g filter="url(#ab-blur)" opacity="0.35" pointerEvents="none">
           <g transform="translate(-200,80)">
             <animateTransform attributeName="transform" type="translate" values="0,0; 80,0; 0,0" dur="45s" repeatCount="indefinite" additive="sum" />
             <circle cx="200" cy="80" r="80" fill="#94a3b8" />
@@ -46,7 +68,7 @@ export default function AnimatedBackground() {
         </g>
 
         {/* skyline silhouettes */}
-        <g transform="translate(0,620)" opacity="0.9">
+        <g transform="translate(0,620)" opacity="0.9" pointerEvents="none">
           <rect x="0" y="80" width="1440" height="200" fill="#0b1220" />
           <g fill="#0f172a">
             <rect x="40" y="0" width="70" height="160" />
@@ -81,7 +103,7 @@ export default function AnimatedBackground() {
         </g>
 
         {/* data lines with moving dashes */}
-        <g stroke="#22d3ee" strokeWidth="2" fill="none" opacity="0.5">
+        <g stroke="#22d3ee" strokeWidth="2" fill="none" opacity="0.5" pointerEvents="none">
           <path className="ab-line" d="M220 640 C 420 560, 720 720, 960 660">
             <animate attributeName="stroke-dashoffset" values="0;-2000" dur="8s" repeatCount="indefinite" />
           </path>
@@ -94,18 +116,18 @@ export default function AnimatedBackground() {
         </g>
 
         {/* floating price tags */}
-        <g className="ab-tags" opacity="0.8">
-          <g className="ab-tag">
+        <g className="ab-tags" opacity="0.8" style={{ pointerEvents: 'auto' }}>
+          <g transform={`translate(${offsets[0].x},${offsets[0].y})`} onPointerDown={onDown(0)} style={{ cursor: 'grab' }}>
             <animateTransform attributeName="transform" type="translate" values="260,560; 320,550; 400,560; 340,576; 260,560" dur="20s" repeatCount="indefinite" />
             <rect x="-20" y="-10" rx="6" ry="6" width="48" height="22" fill="#0ea5e9" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#03111f">$24</text>
           </g>
-          <g className="ab-tag">
+          <g transform={`translate(${offsets[1].x},${offsets[1].y})`} onPointerDown={onDown(1)} style={{ cursor: 'grab' }}>
             <animateTransform attributeName="transform" type="translate" values="760,520; 840,506; 920,526; 880,540; 800,516; 760,520" dur="24s" repeatCount="indefinite" />
             <rect x="-20" y="-10" rx="6" ry="6" width="54" height="22" fill="#8b5cf6" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#100a1f">$19</text>
           </g>
-          <g className="ab-tag">
+          <g transform={`translate(${offsets[2].x},${offsets[2].y})`} onPointerDown={onDown(2)} style={{ cursor: 'grab' }}>
             <animateTransform attributeName="transform" type="translate" values="1120,560; 1190,552; 1260,572; 1210,584; 1120,570; 1100,560; 1120,560" dur="28s" repeatCount="indefinite" />
             <rect x="-20" y="-10" rx="6" ry="6" width="52" height="22" fill="#34d399" opacity="0.9" />
             <text x="4" y="6" fontSize="12" fill="#052012">$31</text>
