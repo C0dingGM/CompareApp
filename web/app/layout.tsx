@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
-import QueryProvider from './providers';
+// import QueryProvider from './providers';
 import ThemeToggle from '../components/ThemeToggle';
 import HeaderSearch from '../components/HeaderSearch';
 import AnimatedBackground from '../components/AnimatedBackground';
@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className="bg-white text-slate-900 dark:bg-bg dark:text-slate-100 antialiased">
       <body className={`${inter.className} min-h-screen bg-hero [background-size:32px_32px,32px_32px,auto,auto,auto]`}> 
         <AnimatedBackground />
-        <QueryProvider>
+        {/* Removed QueryProvider to avoid vendor chunk error */}
           <div className="relative z-10 max-w-5xl mx-auto px-4 py-4">
             <header className="sticky top-4 z-50 mb-6 grid grid-cols-[auto,1fr,auto] items-center rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur supports-[backdrop-filter]:bg-slate-900/30">
               <Link href="/" className="px-4 py-3 text-2xl font-bold bg-gradient-to-r from-sky-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">CompareApp</Link>
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </header>
             {children}
           </div>
-        </QueryProvider>
+        {/* /Removed QueryProvider */}
       </body>
     </html>
   );
