@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState, useEffect } from 'react';
 
+
 export default function AnimatedBackground() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [drag, setDrag] = useState<{i:number,startX:number,startY:number,ox:number,oy:number}|null>(null);
@@ -18,6 +19,7 @@ export default function AnimatedBackground() {
     const min = 0.02;
     const friction = 0.9;
     let last = performance.now();
+
     const step = (now:number) => {
       const dt = now - last; last = now;
       const decay = Math.pow(friction, dt/16);
@@ -38,6 +40,7 @@ export default function AnimatedBackground() {
     if (inertiaIdsRef.current[i]) cancelAnimationFrame(inertiaIdsRef.current[i]!);
     inertiaIdsRef.current[i] = requestAnimationFrame(step);
   };
+
 
   useEffect(() => {
     try {
@@ -83,7 +86,7 @@ export default function AnimatedBackground() {
   };
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 z-10 overflow-hidden">
       <svg ref={svgRef} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} viewBox="0 0 1440 900" preserveAspectRatio="none" className="w-full h-full">
         <defs>
           <linearGradient id="ab-grad" x1="0" y1="0" x2="1" y2="1">
