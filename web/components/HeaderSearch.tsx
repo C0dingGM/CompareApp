@@ -4,7 +4,7 @@ import { useState } from 'react';
 export default function HeaderSearch() {
   const [v, setV] = useState("");
   return (
-    <form action="/" method="GET" className="relative hidden sm:block">
+    <form action="/products" method="GET" className="relative hidden sm:block">
       <input
         type="search"
         name="q"

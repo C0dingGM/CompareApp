@@ -76,3 +76,15 @@ body {
 .animated-title { background-size: 200% 200%; animation: gradientShift 12s ease infinite; }
 @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 .glow-title { text-shadow: 0 2px 18px rgba(56,189,248,0.15), 0 2px 22px rgba(167,139,250,0.12), 0 2px 26px rgba(52,211,153,0.12); }
+
+
+/* Moved from AnimatedBackground styled-jsx */
+.ab-line { stroke-dasharray: 6 10; }
+.ab-twinkles rect { animation: twinkle 3s ease-in-out infinite; }
+.ab-twinkles .tw-1 { animation-delay: 0.4s; }
+.ab-twinkles .tw-2 { animation-delay: 0.8s; }
+.ab-twinkles .tw-3 { animation-delay: 1.2s; }
+.ab-twinkles .tw-4 { animation-delay: 1.6s; }
+.ab-twinkles .tw-5 { animation-delay: 2s; }
+.ab-twinkles .tw-6 { animation-delay: 2.4s; }
+@keyframes twinkle { 0%,100% { opacity: 0.15; } 50% { opacity: 0.7; } }

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import PriceChart from '../../../components/PriceChart';
+import ProductBackground from '../../../components/ProductBackground';
 import { getProductWithOffers } from '../../../lib/mock';
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
@@ -7,6 +8,8 @@ export default async function ProductPage({ params }: { params: { id: string } }
   if (!data) return <div>Not found</div> as any;
   return (
     <div className="space-y-4">
+      {/* Background with product title + SVG price chart */}
+      <ProductBackground id={data.product.id} />
       <div>
         <Link href="/" className="text-slate-400 hover:text-slate-200">← Back to Home</Link>
       </div>

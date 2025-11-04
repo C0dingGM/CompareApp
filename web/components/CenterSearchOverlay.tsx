@@ -18,7 +18,7 @@ export default function CenterSearchOverlay() {
     e?.preventDefault();
     const qq = q.trim();
     if (!qq) return;
-    const url = `/?q=${encodeURIComponent(qq)}${brand ? `&brand=${encodeURIComponent(brand)}` : ''}${category ? `&category=${encodeURIComponent(category)}` : ''}`;
+    const url = `/products?q=${encodeURIComponent(qq)}${brand ? `&brand=${encodeURIComponent(brand)}` : ''}${category ? `&category=${encodeURIComponent(category)}` : ''}`;
     router.push(url);
     /*
 

@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
+
 import { useRouter } from "next/navigation";
 
 export default function AnimatedBackground() {
@@ -18,7 +19,6 @@ export default function AnimatedBackground() {
   ]);
   const dragTrackRef = useRef<{ i: number; lastX: number; lastY: number; lastT: number } | null>(null);
   const inertiaIdsRef = useRef<(number | null)[]>([null, null, null]);
-
   const router = useRouter();
   const [q, setQ] = useState("");
   const [brands, setBrands] = useState<string[]>([]);
@@ -57,6 +57,14 @@ export default function AnimatedBackground() {
     const url = `/?q=${encodeURIComponent(qq)}${brand ? `&brand=${encodeURIComponent(brand)}` : ''}${category ? `&category=${encodeURIComponent(category)}` : ''}`;
     try { router.push(url); } finally { setLoading(false); setSuggestions([]); }
   };
+
+
+
+
+
+
+
+
 
 
   const startInertia = (i: number) => {
@@ -222,6 +230,45 @@ export default function AnimatedBackground() {
             <circle cx="140" cy="100" r="40" fill="#94a3b8" />
           </g>
         </g>
+        {/* Search bar with brand/category filters and suggestions */}
+        <g pointerEvents="auto">
+          <foreignObject x="270" y="362" width="900" height="136">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+              <form onSubmit={submitSearch} style={{ width: '100%' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 8, borderRadius: 14, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', width: '100%', maxWidth: 840, position: 'relative' }}>
+                  <select value={brand} onChange={(e) => setBrand(e.target.value)} style={{ padding: '10px', borderRadius: 10, background: 'rgba(0,0,0,0.2)', color: '#eaf2ff', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <option value="">All companies</option>
+                    {brands.map((b) => (<option key={b} value={b}>{b}</option>))}
+                  </select>
+                  <select value={category} onChange={(e) => setCategory(e.target.value)} style={{ padding: '10px', borderRadius: 10, background: 'rgba(0,0,0,0.2)', color: '#eaf2ff', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <option value="">All categories</option>
+                    {categories.map((c) => (<option key={c} value={c}>{c}</option>))}
+                  </select>
+                  <div style={{ position: 'relative', flex: 1 }}>
+                    <div style={{ position: 'absolute', left: 10, top: 10, width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#90e0ff" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 20.49 21.49 19l-5.99-5zM4 9.5C4 6.46 6.46 4 9.5 4S15 6.46 15 9.5 12.54 15 9.5 15 4 12.54 4 9.5Z"/></svg>
+                    </div>
+                    <input name="q" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products, categories or brands…" style={{ width: '100%', height: 48, padding: '10px 14px 10px 42px', borderRadius: 10, border: 'none', outline: 'none', fontSize: 16, background: 'rgba(255,255,255,0.03)', color: '#eaf2ff', boxShadow: 'inset 0 -1px 0 rgba(255,255,255,0.02)' }} />
+                    {q.trim().length >= 1 && (
+                      <div style={{ position: 'absolute', left: 0, right: 0, top: 52, zIndex: 10, background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, maxHeight: 240, overflowY: 'auto', backdropFilter: 'blur(8px)' }}>
+                        {(suggestions?.length || 0) > 0 ? suggestions.map((p) => (
+                          <a key={p.id} href={`/products?q=${encodeURIComponent(p.title)}${p.brand ? `&brand=${encodeURIComponent(p.brand)}` : ''}`} style={{ display: 'block', padding: '8px 10px', color: '#eaf2ff', textDecoration: 'none' }}>
+                            {p.title} — <span style={{ color: '#a5b4fc' }}>{p.brand}</span>
+                          </a>
+                        )) : (
+                          <div style={{ padding: '8px 10px', color: '#94a3b8' }}>No results</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <button type="submit" disabled={loading || q.trim().length < 1} style={{ height: 48, padding: '0 18px', borderRadius: 10, border: 'none', background: '#6b4bff', color: '#fff', fontWeight: 600, cursor: 'pointer', fontSize: 15, opacity: loading ? 0.8 : 1 }}>
+                    Search
+                  </button>
+                </div>
+              </form>
+            </div>
+          </foreignObject>
+        </g>
 
         {/* skyline silhouettes */}
         <g transform="translate(0,620)" opacity="0.9" pointerEvents="none">
@@ -258,45 +305,7 @@ export default function AnimatedBackground() {
           </g>
         </g>
 
-        {/* Search bar with brand/category filters and suggestions */}
-        <g pointerEvents="auto">
-          <foreignObject x="270" y="362" width="900" height="136">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-              <form onSubmit={submitSearch} style={{ width: '100%' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 8, borderRadius: 14, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', width: '100%', maxWidth: 840, position: 'relative' }}>
-                  <select value={brand} onChange={(e) => setBrand(e.target.value)} style={{ padding: '10px', borderRadius: 10, background: 'rgba(0,0,0,0.2)', color: '#eaf2ff', border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <option value="">All companies</option>
-                    {brands.map((b) => (<option key={b} value={b}>{b}</option>))}
-                  </select>
-                  <select value={category} onChange={(e) => setCategory(e.target.value)} style={{ padding: '10px', borderRadius: 10, background: 'rgba(0,0,0,0.2)', color: '#eaf2ff', border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <option value="">All categories</option>
-                    {categories.map((c) => (<option key={c} value={c}>{c}</option>))}
-                  </select>
-                  <div style={{ position: 'relative', flex: 1 }}>
-                    <div style={{ position: 'absolute', left: 10, top: 10, width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#90e0ff" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 20.49 21.49 19l-5.99-5zM4 9.5C4 6.46 6.46 4 9.5 4S15 6.46 15 9.5 12.54 15 9.5 15 4 12.54 4 9.5Z"/></svg>
-                    </div>
-                    <input name="q" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products, categories or brands…" style={{ width: '100%', height: 48, padding: '10px 14px 10px 42px', borderRadius: 10, border: 'none', outline: 'none', fontSize: 16, background: 'rgba(255,255,255,0.03)', color: '#eaf2ff', boxShadow: 'inset 0 -1px 0 rgba(255,255,255,0.02)' }} />
-                    {q.trim().length >= 1 && (
-                      <div style={{ position: 'absolute', left: 0, right: 0, top: 52, zIndex: 10, background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, maxHeight: 240, overflowY: 'auto', backdropFilter: 'blur(8px)' }}>
-                        {(suggestions?.length || 0) > 0 ? suggestions.map((p) => (
-                          <a key={p.id} href={`/product/${p.id}`} style={{ display: 'block', padding: '8px 10px', color: '#eaf2ff', textDecoration: 'none' }}>
-                            {p.title} — <span style={{ color: '#a5b4fc' }}>{p.brand}</span>
-                          </a>
-                        )) : (
-                          <div style={{ padding: '8px 10px', color: '#94a3b8' }}>No results</div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  <button type="submit" disabled={loading || q.trim().length < 1} style={{ height: 48, padding: '0 18px', borderRadius: 10, border: 'none', background: '#6b4bff', color: '#fff', fontWeight: 600, cursor: 'pointer', fontSize: 15, opacity: loading ? 0.8 : 1 }}>
-                    Search
-                  </button>
-                </div>
-              </form>
-            </div>
-          </foreignObject>
-        </g>
+
 
         {/* data lines */}
         <g stroke="#22d3ee" strokeWidth="2" fill="none" opacity="0.5" pointerEvents="none">
@@ -338,42 +347,7 @@ export default function AnimatedBackground() {
         </g>
       </svg>
 
-      <style jsx>{`
-        .ab-line {
-          stroke-dasharray: 6 10;
-        }
 
-        .ab-twinkles rect {
-          animation: twinkle 3s ease-in-out infinite;
-        }
-        .ab-twinkles .tw-1 {
-          animation-delay: 0.4s;
-        }
-        .ab-twinkles .tw-2 {
-          animation-delay: 0.8s;
-        }
-        .ab-twinkles .tw-3 {
-          animation-delay: 1.2s;
-        }
-        .ab-twinkles .tw-4 {
-          animation-delay: 1.6s;
-        }
-        .ab-twinkles .tw-5 {
-          animation-delay: 2s;
-        }
-        .ab-twinkles .tw-6 {
-          animation-delay: 2.4s;
-        }
-        @keyframes twinkle {
-          0%,
-          100% {
-            opacity: 0.15;
-          }
-          50% {
-            opacity: 0.7;
-          }
-        }
-      `}</style>
     </div>
   );
 }

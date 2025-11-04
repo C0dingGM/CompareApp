@@ -53,13 +53,8 @@ export default function HomePage() {
 
   const search = async () => {
     if (q.trim().length < 1) return;
-    setLoading(true);
-    const url = `/api/search?q=${encodeURIComponent(q)}${brand ? `&brand=${encodeURIComponent(brand)}` : ''}${category ? `&category=${encodeURIComponent(category)}` : ''}`;
-    const res = await fetch(url);
-    const json = await res.json();
-    setResults(json.items);
-    setSuggestions([]);
-    setLoading(false);
+    const url = `/products?q=${encodeURIComponent(q)}${brand ? `&brand=${encodeURIComponent(brand)}` : ''}${category ? `&category=${encodeURIComponent(category)}` : ''}`;
+    window.location.href = url as any;
   };
 
   return (
@@ -88,7 +83,7 @@ export default function HomePage() {
               <div className="absolute top-full left-0 right-0 mt-2 rounded-xl border border-slate-800 bg-card/60 backdrop-blur p-1 max-h-72 overflow-y-auto shadow-xl text-left">
                 {suggestions.length > 0 ? (
                   suggestions.map((p) => (
-                    <a key={p.id} href={`/product/${p.id}`} className="block px-3 py-2 rounded-lg hover:bg-white/5">
+                    <a key={p.id} href={`/products?q=${encodeURIComponent(p.title)}${p.brand ? `&brand=${encodeURIComponent(p.brand)}` : ''}`} className="block px-3 py-2 rounded-lg hover:bg-white/5">
                       {p.title} — <span className="text-slate-400">{p.brand}</span>
                     </a>
                   ))
