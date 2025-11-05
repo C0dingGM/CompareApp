@@ -126,10 +126,19 @@ body {
   65% { opacity: 0; transform: translate3d(460px, 210px, 0); }
 
 /* Ensure CSS variables drive fading on randomized stars */
-.rand-stars .star { animation: starTwinkle var(--dur) ease-in-out var(--delay) infinite; }
+.rand-stars .star {
+  animation-name: starTwinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-duration: var(--dur);
+  animation-delay: calc(var(--delay) + 0s);
+}
 
   100% { opacity: 0; }
 }
+/* Force hardware acceleration so opacity animates */
+.rand-stars .star { will-change: opacity, transform; }
+
 
 /* Random twinkle for sky stars */
 @keyframes starTwinkle {
