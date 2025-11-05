@@ -189,6 +189,13 @@ export default function AnimatedBackground() {
                   <animate attributeName="y" from="80" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                   <animate attributeName="opacity" values="0;1;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                 </rect>
+                {/* tight glow immediately behind head */}
+                <rect x="-20" y="-2.5" width="20" height="5" fill="#fde047" opacity="0.9" filter="url(#ab-soft)">
+                  <animate attributeName="x" from="-60" to="1520" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="y" from="80" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0;0.95;0.4;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                </rect>
+
               </g>
             );
           })}
@@ -202,6 +209,10 @@ export default function AnimatedBackground() {
           <linearGradient id="ab-star" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id="ab-comet" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#fde047" stopOpacity="0.95" />
+            <stop offset="100%" stopColor="#fde047" stopOpacity="0" />
           </linearGradient>
         </defs>
 
