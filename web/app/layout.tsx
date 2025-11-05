@@ -1,9 +1,8 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 // import QueryProvider from './providers';
-import ThemeToggle from '../components/ThemeToggle';
-import HeaderSearch from '../components/HeaderSearch';
 import ConditionalBackground from '../components/ConditionalBackground';
+import AppHeader from './AppHeader';
 
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -17,20 +16,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ConditionalBackground />
         {/* Removed QueryProvider to avoid vendor chunk error */}
           <div className="relative z-10 max-w-5xl mx-auto px-4 py-4">
-            <header className="sticky top-4 z-50 mb-6 grid grid-cols-[auto,1fr,auto] items-center rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur supports-[backdrop-filter]:bg-slate-900/30">
-              <Link href="/" className="px-4 py-3 text-2xl font-bold bg-gradient-to-r from-sky-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">CompareApp</Link>
-              <nav className="flex items-center justify-center gap-2 px-2">
-                <HeaderSearch />
-                <div className="hidden md:flex items-center gap-1 sm:gap-2">
-                  <Link href="/" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">Home</Link>
-                  <Link href="/products" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">Products</Link>
-                  <a href="https://github.com/C0dingGM/CompareApp" target="_blank" rel="noreferrer" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">GitHub</a>
-                </div>
-              </nav>
-              <div className="px-2">
-                <ThemeToggle />
-              </div>
-            </header>
+            <AppHeader />
             {children}
           </div>
         {/* /Removed QueryProvider */}
