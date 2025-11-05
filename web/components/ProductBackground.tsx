@@ -1,3 +1,5 @@
+"use client";
+import { useRef, useState } from "react";
 import { getProductWithOffers } from "../lib/mock";
 
 export default function ProductBackground({ id }: { id: string }) {
@@ -19,6 +21,26 @@ export default function ProductBackground({ id }: { id: string }) {
     const ys = (v: number) => (max === min ? chartH / 2 : chartH - ((v - min) * chartH) / (max - min));
     return arr.map((v, i) => `${i === 0 ? "M" : "L"}${xs(i)},${ys(v)}`).join(" ");
   };
+
+  const [hoverX, setHoverX] = useState<number | null>(null);
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const chartRef = useRef<SVGGElement | null>(null);
+
+  const handleMove = (e: React.PointerEvent<SVGGElement>) => {
+    if (!chartRef.current || !hist.length) return;
+    const svg = chartRef.current.ownerSVGElement!;
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX; pt.y = e.clientY;
+    const ctm = chartRef.current.getScreenCTM();
+    if (!ctm) return;
+    const local = pt.matrixTransform(ctm.inverse());
+    const x = Math.max(0, Math.min(chartW, local.x));
+    setHoverX(x);
+    const i = Math.round((x / Math.max(1, chartW)) * (hist.length - 1));
+    setHoverIdx(i);
+  };
+
+  const handleLeave = () => { setHoverX(null); setHoverIdx(null); };
   const d = pathFor(prices);
 
   return (
@@ -129,7 +151,7 @@ export default function ProductBackground({ id }: { id: string }) {
           <rect x="0" y="0" width={cardW} height={cardH} rx="16" ry="16" fill="rgba(2,6,23,0.55)" stroke="rgba(148,163,184,0.25)" />
           <text x="20" y="44" fontSize="24" fill="#e5e7eb">{data.product.title}</text>
           <text x="20" y="70" fontSize="14" fill="#a5b4fc">Brand: {data.product.brand}</text>
-          <g transform={`translate(${16} ${92})`}>
+          <g ref={chartRef as any} transform={`translate(${16} ${92})`} onPointerMove={handleMove} onPointerLeave={handleLeave} style={{ pointerEvents: 'auto' }}>
             <rect x="0" y="0" width={chartW} height={chartH} fill="rgba(255,255,255,0.02)" stroke="rgba(148,163,184,0.15)" />
             {/* axes */}
             <line x1={0} y1={chartH} x2={chartW} y2={chartH} stroke="rgba(148,163,184,0.35)" />
@@ -164,6 +186,28 @@ export default function ProductBackground({ id }: { id: string }) {
               });
             })()}
             {d && <path d={d} fill="none" stroke="#22d3ee" strokeWidth="2" />}
+            {/* hover crosshair + tooltip */}
+            {hoverX != null && hoverIdx != null && hist[hoverIdx] && (
+              <g>
+                <line x1={hoverX} y1={0} x2={hoverX} y2={chartH} stroke="#22d3ee" opacity="0.6" />
+                {(() => {
+                  const p = hist[hoverIdx];
+                  const min = Math.min(...prices), max = Math.max(...prices);
+                  const y = max === min ? chartH / 2 : chartH - ((p.price - min) * chartH) / (max - min);
+                  const boxW = 110, boxH = 34;
+                  const bx = Math.min(Math.max(8, hoverX - boxW / 2), chartW - boxW - 8);
+                  const by = Math.max(8, y - boxH - 8);
+                  const date = new Date(p.ts);
+                  return (
+                    <g transform={`translate(${bx} ${by})`}>
+                      <rect x={0} y={0} width={boxW} height={boxH} rx={6} ry={6} fill="rgba(2,6,23,0.9)" stroke="rgba(148,163,184,0.3)" />
+                      <text x={8} y={14} fontSize={10} fill="#94a3b8">{`${date.getMonth()+1}/${date.getDate()}`}</text>
+                      <text x={8} y={26} fontSize={12} fill="#e5e7eb">{'$' + p.price.toFixed(2)}</text>
+                    </g>
+                  );
+                })()}
+              </g>
+            )}
           </g>
 
           {/* right column with product stats */}
