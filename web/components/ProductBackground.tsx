@@ -9,9 +9,9 @@ export default function ProductBackground({ id }: { id: string }) {
   const prices = hist.map((h) => h.price);
   const current = prices.length ? prices[prices.length - 1] : (data.offers[0]?.price ?? 0);
 
-  const cardW = 900, cardH = 300;
+  const cardW = 900, cardH = 340;
   const statsW = 300;
-  const chartW = cardW - statsW - 32, chartH = 170;
+  const chartW = cardW - statsW - 32, chartH = 200;
   const leftPad = 36, rightPad = 8;
   const plotW = Math.max(1, chartW - leftPad - rightPad);
   const low = prices.length ? Math.min(...prices) : current;
