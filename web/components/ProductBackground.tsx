@@ -13,14 +13,16 @@ export default function ProductBackground({ id }: { id: string }) {
   const statsW = 300;
   const chartW = cardW - statsW - 32, chartH = 200;
   const leftPad = 36, rightPad = 8;
+  const topPad = 12, bottomPad = 18;
   const plotW = Math.max(1, chartW - leftPad - rightPad);
+  const plotH = Math.max(1, chartH - topPad - bottomPad);
   const low = prices.length ? Math.min(...prices) : current;
   const high = prices.length ? Math.max(...prices) : current;
   const pathFor = (arr: number[]) => {
     if (!arr.length) return "";
     const min = Math.min(...arr), max = Math.max(...arr);
     const xs = (i: number) => leftPad + (i * (plotW)) / Math.max(1, arr.length - 1);
-    const ys = (v: number) => (max === min ? chartH / 2 : chartH - ((v - min) * chartH) / (max - min));
+    const ys = (v: number) => (max === min ? topPad + plotH / 2 : topPad + (plotH - ((v - min) * plotH) / (max - min)));
     return arr.map((v, i) => `${i === 0 ? "M" : "L"}${xs(i)},${ys(v)}`).join(" ");
   };
 
@@ -176,12 +178,12 @@ export default function ProductBackground({ id }: { id: string }) {
           <g ref={chartRef as any} transform={`translate(${16} ${92})`} onPointerMove={handleMove} onPointerLeave={handleLeave} style={{ pointerEvents: 'auto' }}>
             <rect x="0" y="0" width={chartW} height={chartH} fill="rgba(255,255,255,0.02)" stroke="rgba(148,163,184,0.15)" />
             {/* axes (with left padding so y-axis sits inside panel) */}
-            <line x1={leftPad} y1={chartH} x2={leftPad + plotW} y2={chartH} stroke="rgba(148,163,184,0.35)" />
-            <line x1={leftPad} y1={0} x2={leftPad} y2={chartH} stroke="rgba(148,163,184,0.35)" />
+            <line x1={leftPad} y1={topPad + plotH} x2={leftPad + plotW} y2={topPad + plotH} stroke="rgba(148,163,184,0.35)" />
+            <line x1={leftPad} y1={topPad} x2={leftPad} y2={topPad + plotH} stroke="rgba(148,163,184,0.35)" />
             {/* y ticks */}
             {Array.from({ length: 4 }).map((_, i) => {
               const t = i / 4;
-              const y = t * chartH;
+              const y = topPad + t * plotH;
               const val = high - t * (high - low);
               return (
                 <g key={`yt-${i}`}>
@@ -195,7 +197,7 @@ export default function ProductBackground({ id }: { id: string }) {
               const n = Math.max(1, Math.min(4, (hist?.length || 0) - 1));
               return Array.from({ length: n + 1 }).map((_, i) => {
                 const t = i / n;
-                const x = leftPad + t * plotW;
+                const x = leftPad + t * plotW; // unchanged
                 const idx = Math.max(0, Math.min((hist?.length || 1) - 1, Math.round(t * ((hist?.length || 1) - 1))));
                 const d = hist[idx]?.ts ? new Date(hist[idx].ts) : null;
                 const label = d ? `${d.getUTCMonth()+1}/${d.getUTCDate()}` : '';
@@ -211,14 +213,14 @@ export default function ProductBackground({ id }: { id: string }) {
             {/* hover crosshair + tooltip */}
             {hoverX != null && hoverIdx != null && hist[hoverIdx] && (
               <g>
-                <line x1={hoverX} y1={0} x2={hoverX} y2={chartH} stroke="#22d3ee" opacity="0.6" />
+                <line x1={hoverX} y1={topPad} x2={hoverX} y2={topPad + plotH} stroke="#22d3ee" opacity="0.6" />
                 {(() => {
                   const p = hist[hoverIdx];
                   const min = Math.min(...prices), max = Math.max(...prices);
-                  const y = max === min ? chartH / 2 : chartH - ((p.price - min) * chartH) / (max - min);
+                  const y = max === min ? topPad + plotH / 2 : topPad + (plotH - ((p.price - min) * plotH) / (max - min));
                   const boxW = 110, boxH = 34;
                   const bx = Math.min(Math.max(16, hoverX - boxW / 2), leftPad + plotW - boxW - 8);
-                  const by = Math.max(8, y - boxH - 8);
+                  const by = Math.max(topPad + 4, y - boxH - 8);
                   const date = new Date(p.ts);
                   return (
                     <g transform={`translate(${bx} ${by})`}>
