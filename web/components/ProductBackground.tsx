@@ -172,8 +172,8 @@ export default function ProductBackground({ id }: { id: string }) {
           <path className="ab-line" style={{ strokeDasharray: '10 8', animation: 'dashMove 12s linear infinite' }} d="M140 700 C 360 640, 540 760, 820 720" stroke="#34d399" />
         </g>
 
-        {/* product panel */}
-        <g transform={`translate(${270} ${320})`}>
+        {/* product panel (centered) */}
+        <g transform={`translate(${(1440 - cardW) / 2} ${(900 - cardH) / 2})`}>
           <rect x="0" y="0" width={cardW} height={cardH} rx="16" ry="16" fill="rgba(2,6,23,0.55)" stroke="rgba(148,163,184,0.25)" />
           <foreignObject x={cardW - statsW - 126} y={12} width={120} height={36} style={{ pointerEvents: 'auto' }}>
             <button onClick={() => router.push('/')} style={{ width: 110, height: 30, borderRadius: 8, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
