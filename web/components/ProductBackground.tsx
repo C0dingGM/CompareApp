@@ -176,7 +176,7 @@ export default function ProductBackground({ id }: { id: string }) {
                 const x = t * chartW;
                 const idx = Math.max(0, Math.min((hist?.length || 1) - 1, Math.round(t * ((hist?.length || 1) - 1))));
                 const d = hist[idx]?.ts ? new Date(hist[idx].ts) : null;
-                const label = d ? `${d.getMonth()+1}/${d.getDate()}` : '';
+                const label = d ? `${d.getUTCMonth()+1}/${d.getUTCDate()}` : '';
                 return (
                   <g key={`xt-${i}`}>
                     <line x1={x} y1={chartH} x2={x} y2={chartH + 4} stroke="rgba(148,163,184,0.35)" />
