@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 
 export default function HomePage() {
+  return null as any; // hide all main-page content under animated background
   const [q, setQ] = useState('');
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
