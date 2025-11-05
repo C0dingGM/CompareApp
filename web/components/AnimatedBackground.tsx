@@ -186,13 +186,13 @@ export default function AnimatedBackground() {
             return (
               <g key={i} opacity="0.85">
                 {/* tail */}
-                <rect x="-120" y="-3" width="120" height="6" fill="url(#ab-comet)" filter="url(#ab-soft)">
+                <rect x="-10" y="-2" width="24" height="4" fill="url(#ab-star)" filter="url(#ab-soft)">
                   <animate attributeName="x" from="-50" to="1500" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                   <animate attributeName="y" from="60" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                   <animate attributeName="opacity" values="0;0.85;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                 </rect>
                 {/* head (square) */}
-                <rect x="-3.5" y="-3.5" width="7" height="7" fill="#fde047" filter="url(#ab-soft)">
+                <rect x="-3" y="-3" width="6" height="6" fill="#ffffff" filter="url(#ab-soft)">
                   <animate attributeName="x" from="-50" to="1500" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                   <animate attributeName="y" from="60" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                   <animate attributeName="opacity" values="0;1;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
@@ -211,10 +211,6 @@ export default function AnimatedBackground() {
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
           </linearGradient>
-          <linearGradient id="ab-comet" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#fde047" stopOpacity="0.95" />
-            <stop offset="100%" stopColor="#fde047" stopOpacity="0" />
-          </linearGradient>
         </defs>
 
         {/* gradient backdrop */}
@@ -222,7 +218,7 @@ export default function AnimatedBackground() {
         {/* comet / shooting stars */}
         <g pointerEvents="none">
           {Array.from({ length: 3 }).map((_, i) => {
-            const delay = i * 3; // staggered start
+            const delay = i ; // staggered start
             return (
               <g key={i} opacity="0.8">
                 {/* tail */}
