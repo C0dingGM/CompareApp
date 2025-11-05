@@ -194,15 +194,6 @@ export default function AnimatedBackground() {
 
         {/* gradient backdrop */}
 
-        {/* shooting stars (more frequent) */}
-        <g opacity="0.95" pointerEvents="none">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <g key={i} className={`shooting-star delay-${(i%6)+1}`} transform={`translate(${80 + (i%6)*220} ${60 + (i%4)*70})`}>
-              <line x1="0" y1="0" x2="64" y2="0" stroke="url(#ab-star)" strokeWidth="2.5" />
-              <circle cx="0" cy="0" r="2.2" fill="#fff" />
-            </g>
-          ))}
-        </g>
 
         <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" pointerEvents="none" />
 
