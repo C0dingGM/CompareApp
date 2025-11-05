@@ -1,8 +1,10 @@
 "use client";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { getProductWithOffers } from "../lib/mock";
 
 export default function ProductBackground({ id }: { id: string }) {
+  const router = useRouter();
   const data = getProductWithOffers(id);
   if (!data) return null as any;
   const hist = [...data.price_history].sort((a, b) => +new Date(a.ts) - +new Date(b.ts));
@@ -173,6 +175,11 @@ export default function ProductBackground({ id }: { id: string }) {
         {/* product panel */}
         <g transform={`translate(${270} ${320})`}>
           <rect x="0" y="0" width={cardW} height={cardH} rx="16" ry="16" fill="rgba(2,6,23,0.55)" stroke="rgba(148,163,184,0.25)" />
+          <foreignObject x={16} y={12} width={120} height={36} style={{ pointerEvents: 'auto' }}>
+            <button onClick={() => router.push('/')} style={{ width: 110, height: 30, borderRadius: 8, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+              ← Home
+            </button>
+          </foreignObject>
           <text x="20" y="44" fontSize="24" fill="#e5e7eb">{data.product.title}</text>
           <text x="20" y="70" fontSize="14" fill="#a5b4fc">Brand: {data.product.brand}</text>
           <g ref={chartRef as any} transform={`translate(${16} ${92})`} onPointerMove={handleMove} onPointerLeave={handleLeave} style={{ pointerEvents: 'auto' }}>
