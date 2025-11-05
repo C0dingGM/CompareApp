@@ -234,6 +234,23 @@ export default function AnimatedBackground() {
               repeatCount="indefinite"
               additive="sum"
             />
+
+        {/* shooting star: glowing square with fading trail */}
+        <g pointerEvents="none" opacity="0.95">
+          {[
+            { y: '100px', dy: '80px', dur: '9s', delay: '0.6s' },
+            { y: '160px', dy: '120px', dur: '10.5s', delay: '2.0s' },
+            { y: '220px', dy: '140px', dur: '8.5s', delay: '3.5s' },
+          ].map((s, i) => (
+            <g key={i} className="square-star" style={{ ['--y' as any]: s.y, ['--dy' as any]: s.dy, ['--dur' as any]: s.dur, ['--delay' as any]: s.delay }}>
+              <g transform="rotate(-18)">
+                <rect x="-90" y="-1.8" width="90" height="3.6" fill="url(#ab-star)" opacity="0.85" />
+                <rect x="0" y="-3.5" width="7" height="7" fill="#ffffff" filter="url(#ab-soft)" />
+              </g>
+            </g>
+          ))}
+        </g>
+
             <circle cx="200" cy="80" r="60" fill="#94a3b8" />
             <circle cx="260" cy="90" r="45" fill="#94a3b8" />
             <circle cx="140" cy="100" r="40" fill="#94a3b8" />

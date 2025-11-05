@@ -133,3 +133,21 @@ body {
 }
 
 
+
+
+
+
+
+/* Glowing square shooting star */
+.square-star {
+  position: relative;
+  animation: squareFly var(--dur) linear infinite;
+  animation-delay: var(--delay);
+  transform: translate3d(-160px, var(--y), 0);
+}
+@keyframes squareFly {
+  0%   { opacity: 0; transform: translate3d(-160px, var(--y), 0); }
+  6%   { opacity: 1; }
+  60%  { opacity: 1; transform: translate3d(1440px, calc(var(--y) + var(--dy)), 0); }
+  100% { opacity: 0; transform: translate3d(1680px, calc(var(--y) + var(--dy)), 0); }
+}
