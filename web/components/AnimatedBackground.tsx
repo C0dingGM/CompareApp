@@ -204,9 +204,17 @@ export default function AnimatedBackground() {
         </defs>
 
         {/* randomized sky stars that fade in/out at random intervals */}
-        <g opacity="0.9" pointerEvents="none">
+        <g className="rand-stars" opacity="0.95" pointerEvents="none">
           {stars.map((s, i) => (
-            <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#ffffff" style={{ animation: `starTwinkle ${s.dur}s ease-in-out ${s.delay}s infinite` }} />
+            <circle
+              key={i}
+              className="star"
+              cx={s.x}
+              cy={s.y}
+              r={s.r}
+              fill="#ffffff"
+              style={{ ['--dur' as any]: `${s.dur}s`, ['--delay' as any]: `${s.delay}s`, opacity: 0.1 as any }}
+            />
           ))}
         </g>
 
