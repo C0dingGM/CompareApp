@@ -204,7 +204,7 @@ export default function AnimatedBackground() {
         {/* animate the entire group */}
         <animateTransform
           attributeName="transform"
-          type="translate"
+          type="translate"  
           from={`${startX} ${startY}`}
           to={`${endX} ${endY}`}
           dur={`${6 + Math.random() * 4}s`} // random speed
