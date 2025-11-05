@@ -28,7 +28,6 @@ export default function AnimatedBackground() {
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-
   useEffect(() => {
     fetch('/api/brands')
       .then(r => r.json())
@@ -179,6 +178,29 @@ export default function AnimatedBackground() {
             </stop>
           </linearGradient>
           <filter id="ab-blur" x="-20%" y="-20%" width="140%" height="140%">
+        {/* comet / shooting star (square with fading trail) */}
+        <g pointerEvents="none">
+          {Array.from({ length: 3 }).map((_, i) => {
+            const delay = i * 2.5;
+            return (
+              <g key={i} opacity="0.85">
+                {/* tail */}
+                <rect x="-10" y="-2" width="24" height="4" fill="url(#ab-star)" filter="url(#ab-soft)">
+                  <animate attributeName="x" from="-50" to="1500" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="y" from="60" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0;0.85;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                </rect>
+                {/* head (square) */}
+                <rect x="-3" y="-3" width="6" height="6" fill="#ffffff" filter="url(#ab-soft)">
+                  <animate attributeName="x" from="-50" to="1500" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="y" from="60" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0;1;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                </rect>
+              </g>
+            );
+          })}
+        </g>
+
             <feGaussianBlur stdDeviation="20" />
           </filter>
           <filter id="ab-soft" x="-20%" y="-20%" width="140%" height="140%">
@@ -190,10 +212,17 @@ export default function AnimatedBackground() {
           </linearGradient>
         </defs>
 
-
-
         {/* gradient backdrop */}
 
+        {/* shooting stars (more frequent) */}
+        <g opacity="0.95" pointerEvents="none">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <g key={i} className={`shooting-star delay-${(i%6)+1}`} transform={`translate(${80 + (i%6)*220} ${60 + (i%4)*70})`}>
+              <line x1="0" y1="0" x2="64" y2="0" stroke="url(#ab-star)" strokeWidth="2.5" />
+              <circle cx="0" cy="0" r="2.2" fill="#fff" />
+            </g>
+          ))}
+        </g>
 
         <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" pointerEvents="none" />
 
@@ -234,23 +263,6 @@ export default function AnimatedBackground() {
               repeatCount="indefinite"
               additive="sum"
             />
-
-        {/* shooting star: glowing square with fading trail */}
-        <g pointerEvents="none" opacity="0.95">
-          {[
-            { y: '100px', dy: '80px', dur: '9s', delay: '0.6s' },
-            { y: '160px', dy: '120px', dur: '10.5s', delay: '2.0s' },
-            { y: '220px', dy: '140px', dur: '8.5s', delay: '3.5s' },
-          ].map((s, i) => (
-            <g key={i} className="square-star" style={{ ['--y' as any]: s.y, ['--dy' as any]: s.dy, ['--dur' as any]: s.dur, ['--delay' as any]: s.delay }}>
-              <g transform="rotate(-18)">
-                <rect x="-90" y="-1.8" width="90" height="3.6" fill="url(#ab-star)" opacity="0.85" />
-                <rect x="0" y="-3.5" width="7" height="7" fill="#ffffff" filter="url(#ab-soft)" />
-              </g>
-            </g>
-          ))}
-        </g>
-
             <circle cx="200" cy="80" r="60" fill="#94a3b8" />
             <circle cx="260" cy="90" r="45" fill="#94a3b8" />
             <circle cx="140" cy="100" r="40" fill="#94a3b8" />
