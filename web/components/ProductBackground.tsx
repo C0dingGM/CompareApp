@@ -8,7 +8,8 @@ export default function ProductBackground({ id }: { id: string }) {
   const current = prices.length ? prices[prices.length - 1] : (data.offers[0]?.price ?? 0);
 
   const cardW = 900, cardH = 300;
-  const chartW = cardW - 32, chartH = 100;
+  const statsW = 300;
+  const chartW = cardW - statsW - 32, chartH = 120;
   const low = prices.length ? Math.min(...prices) : current;
   const high = prices.length ? Math.max(...prices) : current;
   const pathFor = (arr: number[]) => {
@@ -130,12 +131,43 @@ export default function ProductBackground({ id }: { id: string }) {
           <text x="20" y="70" fontSize="14" fill="#a5b4fc">Brand: {data.product.brand}</text>
           <g transform={`translate(${16} ${92})`}>
             <rect x="0" y="0" width={chartW} height={chartH} fill="rgba(255,255,255,0.02)" stroke="rgba(148,163,184,0.15)" />
+            {/* axes */}
+            <line x1={0} y1={chartH} x2={chartW} y2={chartH} stroke="rgba(148,163,184,0.35)" />
+            <line x1={0} y1={0} x2={0} y2={chartH} stroke="rgba(148,163,184,0.35)" />
+            {/* y ticks */}
+            {Array.from({ length: 4 }).map((_, i) => {
+              const t = i / 4;
+              const y = t * chartH;
+              const val = high - t * (high - low);
+              return (
+                <g key={`yt-${i}`}>
+                  <line x1={-4} y1={y} x2={0} y2={y} stroke="rgba(148,163,184,0.35)" />
+                  <text x={-8} y={y + 4} fontSize="10" fill="#94a3b8" textAnchor="end">${'{'}val.toFixed(0){'}'}</text>
+                </g>
+              );
+            })}
+            {/* x ticks */}
+            {(() => {
+              const n = Math.max(1, Math.min(4, (hist?.length || 0) - 1));
+              return Array.from({ length: n + 1 }).map((_, i) => {
+                const t = i / n;
+                const x = t * chartW;
+                const idx = Math.max(0, Math.min((hist?.length || 1) - 1, Math.round(t * ((hist?.length || 1) - 1))));
+                const label = hist[idx]?.ts ? new Date(hist[idx].ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '';
+                return (
+                  <g key={`xt-${i}`}>
+                    <line x1={x} y1={chartH} x2={x} y2={chartH + 4} stroke="rgba(148,163,184,0.35)" />
+                    <text x={x} y={chartH + 16} fontSize="10" fill="#94a3b8" textAnchor="middle">{label}</text>
+                  </g>
+                );
+              });
+            })()}
             {d && <path d={d} fill="none" stroke="#22d3ee" strokeWidth="2" />}
           </g>
 
           {/* right column with product stats */}
-          <g transform={`translate(${cardW - 300} ${24})`}>
-            <rect x="0" y="0" width="268" height="252" rx="12" ry="12" fill="rgba(255,255,255,0.03)" stroke="rgba(148,163,184,0.15)" />
+          <g transform={`translate(${cardW - statsW} ${24})`}>
+            <rect x="0" y="0" width={statsW - 32} height="252" rx="12" ry="12" fill="rgba(255,255,255,0.03)" stroke="rgba(148,163,184,0.15)" />
             <text x="16" y="28" fontSize="14" fill="#94a3b8">Current price</text>
             <text x="16" y="50" fontSize="22" fontWeight="700" fill="#22d3ee">${'{'}current.toFixed(2){'}'}</text>
 
