@@ -61,12 +61,6 @@ export default function AnimatedBackground() {
 
 
 
-
-
-
-
-
-
   const startInertia = (i: number) => {
     let vx = velRef.current[i].vx;
     let vy = velRef.current[i].vy;
@@ -181,20 +175,18 @@ export default function AnimatedBackground() {
             
         {/* comet / shooting star (square with fading trail) */}
         <g pointerEvents="none">
-          {Array.from({ length: 3 }).map((_, i) => {
+          {[0,1,2].map((i) => {
             const delay = i * 2.5;
             return (
-              <g key={i} opacity="0.85">
-                {/* tail */}
-                <rect x="-10" y="-2" width="24" height="4" fill="url(#ab-star)" filter="url(#ab-soft)">
-                  <animate attributeName="x" from="-50" to="1500" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="y" from="60" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0;0.85;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+              <g key={i} opacity="0.9">
+                <rect x="-120" y="-3" width="120" height="6" fill="url(#ab-comet)" filter="url(#ab-soft)">
+                  <animate attributeName="x" from="-60" to="1520" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="y" from="80" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0;1;0.2;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                 </rect>
-                {/* head (square) */}
-                <rect x="-3" y="-3" width="6" height="6" fill="#ffffff" filter="url(#ab-soft)">
-                  <animate attributeName="x" from="-50" to="1500" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="y" from="60" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                <rect x="-3.5" y="-3.5" width="7" height="7" fill="#fde047" filter="url(#ab-soft)">
+                  <animate attributeName="x" from="-60" to="1520" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="y" from="80" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                   <animate attributeName="opacity" values="0;1;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                 </rect>
               </g>
@@ -218,7 +210,7 @@ export default function AnimatedBackground() {
         {/* comet / shooting stars */}
         <g pointerEvents="none">
           {Array.from({ length: 3 }).map((_, i) => {
-            const delay = i ; // staggered start
+            const delay = i * 5 ; // staggered start
             return (
               <g key={i} opacity="0.8">
                 {/* tail */}
