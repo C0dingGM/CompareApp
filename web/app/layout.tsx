@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ConditionalBackground />
         {/* Removed QueryProvider to avoid vendor chunk error */}
           <div className="relative z-10 max-w-5xl mx-auto px-4 py-4">
-            <AppHeader />
+            {/* <AppHeader /> header hidden on homepage by component */}
             {children}
           </div>
         {/* /Removed QueryProvider */}
