@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import PriceChart from '../../../components/PriceChart';
+import dynamic from 'next/dynamic';
+const PriceChart = dynamic(() => import('../../../components/PriceChart'), { ssr: false });
 import ProductBackground from '../../../components/ProductBackground';
 import { getProductWithOffers } from '../../../lib/mock';
 
