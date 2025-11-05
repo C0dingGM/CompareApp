@@ -7,8 +7,10 @@ export default function ProductBackground({ id }: { id: string }) {
   const prices = hist.map((h) => h.price);
   const current = prices.length ? prices[prices.length - 1] : (data.offers[0]?.price ?? 0);
 
-  const cardW = 900, cardH = 220;
+  const cardW = 900, cardH = 300;
   const chartW = cardW - 32, chartH = 100;
+  const low = prices.length ? Math.min(...prices) : current;
+  const high = prices.length ? Math.max(...prices) : current;
   const pathFor = (arr: number[]) => {
     if (!arr.length) return "";
     const min = Math.min(...arr), max = Math.max(...arr);
@@ -125,10 +127,32 @@ export default function ProductBackground({ id }: { id: string }) {
         <g transform={`translate(${270} ${320})`}>
           <rect x="0" y="0" width={cardW} height={cardH} rx="16" ry="16" fill="rgba(2,6,23,0.55)" stroke="rgba(148,163,184,0.25)" />
           <text x="20" y="44" fontSize="24" fill="#e5e7eb">{data.product.title}</text>
-          <text x="20" y="72" fontSize="16" fill="#93c5fd">${'{'}current.toFixed(2){'}'}</text>
-          <g transform={`translate(${16} ${96})`}>
+          <text x="20" y="70" fontSize="14" fill="#a5b4fc">Brand: {data.product.brand}</text>
+          <g transform={`translate(${16} ${92})`}>
             <rect x="0" y="0" width={chartW} height={chartH} fill="rgba(255,255,255,0.02)" stroke="rgba(148,163,184,0.15)" />
             {d && <path d={d} fill="none" stroke="#22d3ee" strokeWidth="2" />}
+          </g>
+
+          {/* right column with product stats */}
+          <g transform={`translate(${cardW - 300} ${24})`}>
+            <rect x="0" y="0" width="268" height="252" rx="12" ry="12" fill="rgba(255,255,255,0.03)" stroke="rgba(148,163,184,0.15)" />
+            <text x="16" y="28" fontSize="14" fill="#94a3b8">Current price</text>
+            <text x="16" y="50" fontSize="22" fontWeight="700" fill="#22d3ee">${'{'}current.toFixed(2){'}'}</text>
+
+            <text x="16" y="86" fontSize="14" fill="#94a3b8">24h change</text>
+            <text x="16" y="108" fontSize="16" fill="#34d399">-2.1%</text>
+
+            <text x="140" y="86" fontSize="14" fill="#94a3b8">7d change</text>
+            <text x="140" y="108" fontSize="16" fill="#f59e0b">+1.4%</text>
+
+            <text x="16" y="144" fontSize="14" fill="#94a3b8">Low</text>
+            <text x="16" y="166" fontSize="16" fill="#e5e7eb">${'{'}low.toFixed(2){'}'}</text>
+
+            <text x="140" y="144" fontSize="14" fill="#94a3b8">High</text>
+            <text x="140" y="166" fontSize="16" fill="#e5e7eb">${'{'}high.toFixed(2){'}'}</text>
+
+            <text x="16" y="202" fontSize="14" fill="#94a3b8">Retailers</text>
+            <text x="16" y="224" fontSize="16" fill="#e5e7eb">${'{'}data.offers.length{'}'}</text>
           </g>
         </g>
       </svg>
