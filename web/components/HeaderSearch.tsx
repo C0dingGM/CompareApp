@@ -1,4 +1,9 @@
 "use client";
+
+/*
+  HeaderSearch: A simple, controlled search input displayed in the top header (desktop only).
+  Submits a GET request to /products with the query param `q`. Includes an inline search icon.
+*/
 import { useState } from 'react';
 
 export default function HeaderSearch() {
