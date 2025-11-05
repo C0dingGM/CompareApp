@@ -127,6 +127,15 @@ body {
   100% { opacity: 0; }
 }
 
+/* Random twinkle for sky stars */
+@keyframes starTwinkle {
+  0% { opacity: 0.1; }
+  10% { opacity: 0.85; }
+  35% { opacity: 0.0; }
+  60% { opacity: 0.9; }
+  100% { opacity: 0.1; }
+}
+
   to   { transform: translateX(60px); }
 }
 

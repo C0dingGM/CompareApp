@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -27,6 +27,20 @@ export default function AnimatedBackground() {
   const [category, setCategory] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const stars = useMemo(() => {
+    // create random stars across the sky region (top 60%)
+    const N = 90;
+    const rng = (seed: number) => () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+    const r = rng(123456);
+    return Array.from({ length: N }).map((_, i) => ({
+      x: Math.floor(20 + r() * 1400),
+      y: Math.floor(20 + r() * 520),
+      r: +(0.6 + r() * 1.8).toFixed(2),
+      delay: +(r() * 6).toFixed(2),
+      dur: +(3 + r() * 6).toFixed(2),
+    }));
+  }, []);
+
 
   useEffect(() => {
     fetch('/api/brands')
@@ -189,10 +203,10 @@ export default function AnimatedBackground() {
           </linearGradient>
         </defs>
 
-        {/* static sky stars that twinkle (disappear/reappear) */}
-        <g className="sky-twinkles" opacity="0.85" pointerEvents="none">
-          {Array.from({ length: 24 }).map((_, i) => (
-            <circle key={i} cx={40 + (i*58)%1400} cy={50 + (i*37)%260} r={(i%3)+0.6} fill="#ffffff" className={`tw-${i%7}`} />
+        {/* randomized sky stars that fade in/out at random intervals */}
+        <g opacity="0.9" pointerEvents="none">
+          {stars.map((s, i) => (
+            <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#ffffff" style={{ animation: `starTwinkle ${s.dur}s ease-in-out ${s.delay}s infinite` }} />
           ))}
         </g>
 
