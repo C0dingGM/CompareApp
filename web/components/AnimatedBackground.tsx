@@ -189,6 +189,14 @@ export default function AnimatedBackground() {
           </linearGradient>
         </defs>
 
+        {/* static sky stars that twinkle (disappear/reappear) */}
+        <g className="sky-twinkles" opacity="0.85" pointerEvents="none">
+          {Array.from({ length: 24 }).map((_, i) => (
+            <circle key={i} cx={40 + (i*58)%1400} cy={50 + (i*37)%260} r={(i%3)+0.6} fill="#ffffff" className={`tw-${i%7}`} />
+          ))}
+        </g>
+
+
         {/* gradient backdrop */}
 
         {/* shooting stars (more frequent) */}

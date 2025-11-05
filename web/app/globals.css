@@ -83,14 +83,14 @@ body {
 /* Slow down home data lines */
 .ab-line { stroke-dasharray: 8 12; animation: dashMove 16s linear infinite; }
 
-.ab-twinkles rect { animation: twinkle 3s ease-in-out infinite; }
-.ab-twinkles .tw-1 { animation-delay: 0.4s; }
-.ab-twinkles .tw-2 { animation-delay: 0.8s; }
-.ab-twinkles .tw-3 { animation-delay: 1.2s; }
-.ab-twinkles .tw-4 { animation-delay: 1.6s; }
-.ab-twinkles .tw-5 { animation-delay: 2s; }
-.ab-twinkles .tw-6 { animation-delay: 2.4s; }
-@keyframes twinkle { 0%,100% { opacity: 0.15; } 50% { opacity: 0.7; } }
+.ab-twinkles rect, .sky-twinkles circle { animation: twinkle 3.2s ease-in-out infinite; }
+.ab-twinkles .tw-1, .sky-twinkles .tw-1 { animation-delay: 0.4s; }
+.ab-twinkles .tw-2, .sky-twinkles .tw-2 { animation-delay: 0.8s; }
+.ab-twinkles .tw-3, .sky-twinkles .tw-3 { animation-delay: 1.2s; }
+.ab-twinkles .tw-4, .sky-twinkles .tw-4 { animation-delay: 1.6s; }
+.ab-twinkles .tw-5, .sky-twinkles .tw-5 { animation-delay: 2s; }
+.ab-twinkles .tw-6, .sky-twinkles .tw-6 { animation-delay: 2.4s; }
+@keyframes twinkle { 0%,100% { opacity: 0.05; } 40% { opacity: 0.9; } 60% { opacity: 0.0; } }
 
 /* ProductBackground gradient animation */
 .pb-grad-1, .pb-grad-2 { animation: pbGradShift 16s ease-in-out infinite; }
