@@ -50,6 +50,7 @@ export default function ProductBackground({ id }: { id: string }) {
   const [hoverX, setHoverX] = useState<number | null>(null);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   const chartRef = useRef<SVGGElement | null>(null);
+  const [homeHover, setHomeHover] = useState(false);
 
   const handleMove = (e: React.PointerEvent<SVGGElement>) => {
     if (!chartRef.current || !hist.length) return;
@@ -89,7 +90,25 @@ export default function ProductBackground({ id }: { id: string }) {
 
         {/* global top-right Home button */}
         <foreignObject x={1440 - 120 - 16} y={16} width={120} height={36} style={{ pointerEvents: 'auto' }}>
-          <button onClick={() => router.push('/')} style={{ width: 110, height: 30, borderRadius: 8, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+          <button
+            onMouseEnter={() => setHomeHover(true)}
+            onMouseLeave={() => setHomeHover(false)}
+            onClick={() => router.push('/')}
+            style={{
+              width: 110,
+              height: 30,
+              borderRadius: 8,
+              border: '1px solid rgba(148,163,184,0.3)',
+              background: homeHover ? 'rgba(99,102,241,0.25)' : 'rgba(15,23,42,0.6)',
+              color: '#e5e7eb',
+              fontSize: 12,
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: homeHover ? '0 0 12px rgba(99,102,241,0.35)' : 'none',
+              transform: homeHover ? 'translateY(-1px)' : 'translateY(0)',
+              transition: 'all 200ms ease'
+            }}
+          >
             ← Home
           </button>
         </foreignObject>
