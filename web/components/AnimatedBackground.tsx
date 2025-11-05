@@ -27,15 +27,18 @@ export default function AnimatedBackground() {
   const [category, setCategory] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const stars = useMemo(() => {
-    const N = 120;
-    return Array.from({ length: N }).map(() => ({
-      x: Math.floor(10 + Math.random() * 1420),
-      y: Math.floor(10 + Math.random() * 520),
-      r: +(0.6 + Math.random() * 2.2).toFixed(2),
-      delay: +(Math.random() * 8).toFixed(2),
-      dur: +(2.5 + Math.random() * 6).toFixed(2),
-    }));
+  const comets = useMemo(() => {
+    const N = 8;
+    return Array.from({ length: N }).map((_, i) => {
+      const sx = -200 - Math.random() * 200;
+      const sy = 40 + Math.random() * 320;
+      const tx = 1540 + Math.random() * 220;
+      const ty = sy + 120 + Math.random() * 220;
+      const dur = (10 + Math.random() * 12).toFixed(2) + 's';
+      const delay = (Math.random() * 8).toFixed(2) + 's';
+      const rot = (Math.atan2(ty - sy, tx - sx) * 180 / Math.PI).toFixed(2) + 'deg';
+      return { sx, sy, tx, ty, dur, delay, rot };
+    });
   }, []);
 
 
@@ -200,18 +203,13 @@ export default function AnimatedBackground() {
           </linearGradient>
         </defs>
 
-        {/* randomized sky stars that fade in/out at random intervals */}
-        <g className="rand-stars" opacity="0.95" pointerEvents="none">
-          {stars.map((s, i) => (
-            <circle
-              key={i}
-              className="star"
-              cx={s.x}
-              cy={s.y}
-              r={s.r}
-              fill="#ffffff"
-              style={{ ['--dur' as any]: `${s.dur}s`, ['--delay' as any]: `${s.delay}s`, opacity: 0.1 as any }}
-            />
+        {/* shooting comets */}
+        <g className="comets" opacity="0.95" pointerEvents="none">
+          {comets.map((c, i) => (
+            <g key={i} className="comet" style={{ ['--dur' as any]: c.dur, ['--delay' as any]: c.delay }} transform={`translate(${c.sx} ${c.sy}) rotate(${c.rot})`}>
+              <line x1="-140" y1="0" x2="0" y2="0" stroke="url(#ab-star)" strokeWidth="2.5" strokeLinecap="round" />
+              <circle cx="0" cy="0" r="2.8" fill="#fff" />
+            </g>
           ))}
         </g>
 
