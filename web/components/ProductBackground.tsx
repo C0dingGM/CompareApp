@@ -11,16 +11,37 @@ export default function ProductBackground({ id }: { id: string }) {
 
   const cardW = 900, cardH = 300;
   const statsW = 300;
-  const chartW = cardW - statsW - 32, chartH = 120;
+  const chartW = cardW - statsW - 32, chartH = 140;
+  const leftPad = 36, rightPad = 8;
+  const plotW = Math.max(1, chartW - leftPad - rightPad);
   const low = prices.length ? Math.min(...prices) : current;
   const high = prices.length ? Math.max(...prices) : current;
   const pathFor = (arr: number[]) => {
     if (!arr.length) return "";
     const min = Math.min(...arr), max = Math.max(...arr);
-    const xs = (i: number) => (i * (chartW - 0)) / Math.max(1, arr.length - 1);
+    const xs = (i: number) => leftPad + (i * (plotW)) / Math.max(1, arr.length - 1);
     const ys = (v: number) => (max === min ? chartH / 2 : chartH - ((v - min) * chartH) / (max - min));
     return arr.map((v, i) => `${i === 0 ? "M" : "L"}${xs(i)},${ys(v)}`).join(" ");
   };
+
+  // compute changes
+  const lastTs = hist.length ? +new Date(hist[hist.length - 1].ts) : 0;
+  const idxAtDelta = (days: number) => {
+    if (hist.length < 2) return null;
+    const target = lastTs - days * 864e5;
+    let found: number | null = null;
+    for (let i = hist.length - 2; i >= 0; i--) {
+      const t = +new Date(hist[i].ts);
+      if (t <= target) { found = i; break; }
+    }
+    if (found == null) found = Math.max(0, hist.length - 2);
+    return found;
+  };
+  const pct = (past: number | null) => past && past !== 0 ? ((current - past) / past) * 100 : null;
+  const i24 = idxAtDelta(1);
+  const i7 = idxAtDelta(7);
+  const change24 = i24 != null ? pct(hist[i24].price) : null;
+  const change7 = i7 != null ? pct(hist[i7].price) : null;
 
   const [hoverX, setHoverX] = useState<number | null>(null);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
@@ -34,9 +55,10 @@ export default function ProductBackground({ id }: { id: string }) {
     const ctm = chartRef.current.getScreenCTM();
     if (!ctm) return;
     const local = pt.matrixTransform(ctm.inverse());
-    const x = Math.max(0, Math.min(chartW, local.x));
+    const x = Math.max(leftPad, Math.min(leftPad + plotW, local.x));
     setHoverX(x);
-    const i = Math.round((x / Math.max(1, chartW)) * (hist.length - 1));
+    const t = (x - leftPad) / Math.max(1, plotW);
+    const i = Math.round(t * (hist.length - 1));
     setHoverIdx(i);
   };
 
@@ -153,9 +175,9 @@ export default function ProductBackground({ id }: { id: string }) {
           <text x="20" y="70" fontSize="14" fill="#a5b4fc">Brand: {data.product.brand}</text>
           <g ref={chartRef as any} transform={`translate(${16} ${92})`} onPointerMove={handleMove} onPointerLeave={handleLeave} style={{ pointerEvents: 'auto' }}>
             <rect x="0" y="0" width={chartW} height={chartH} fill="rgba(255,255,255,0.02)" stroke="rgba(148,163,184,0.15)" />
-            {/* axes */}
-            <line x1={0} y1={chartH} x2={chartW} y2={chartH} stroke="rgba(148,163,184,0.35)" />
-            <line x1={0} y1={0} x2={0} y2={chartH} stroke="rgba(148,163,184,0.35)" />
+            {/* axes (with left padding so y-axis sits inside panel) */}
+            <line x1={leftPad} y1={chartH} x2={leftPad + plotW} y2={chartH} stroke="rgba(148,163,184,0.35)" />
+            <line x1={leftPad} y1={0} x2={leftPad} y2={chartH} stroke="rgba(148,163,184,0.35)" />
             {/* y ticks */}
             {Array.from({ length: 4 }).map((_, i) => {
               const t = i / 4;
@@ -163,8 +185,8 @@ export default function ProductBackground({ id }: { id: string }) {
               const val = high - t * (high - low);
               return (
                 <g key={`yt-${i}`}>
-                  <line x1={-4} y1={y} x2={0} y2={y} stroke="rgba(148,163,184,0.35)" />
-                  <text x={-8} y={y + 4} fontSize="10" fill="#94a3b8" textAnchor="end">{val.toFixed(0)}</text>
+                  <line x1={leftPad - 4} y1={y} x2={leftPad} y2={y} stroke="rgba(148,163,184,0.35)" />
+                  <text x={leftPad - 8} y={y + 4} fontSize="10" fill="#94a3b8" textAnchor="end">{val.toFixed(0)}</text>
                 </g>
               );
             })}
@@ -173,7 +195,7 @@ export default function ProductBackground({ id }: { id: string }) {
               const n = Math.max(1, Math.min(4, (hist?.length || 0) - 1));
               return Array.from({ length: n + 1 }).map((_, i) => {
                 const t = i / n;
-                const x = t * chartW;
+                const x = leftPad + t * plotW;
                 const idx = Math.max(0, Math.min((hist?.length || 1) - 1, Math.round(t * ((hist?.length || 1) - 1))));
                 const d = hist[idx]?.ts ? new Date(hist[idx].ts) : null;
                 const label = d ? `${d.getUTCMonth()+1}/${d.getUTCDate()}` : '';
@@ -195,13 +217,13 @@ export default function ProductBackground({ id }: { id: string }) {
                   const min = Math.min(...prices), max = Math.max(...prices);
                   const y = max === min ? chartH / 2 : chartH - ((p.price - min) * chartH) / (max - min);
                   const boxW = 110, boxH = 34;
-                  const bx = Math.min(Math.max(8, hoverX - boxW / 2), chartW - boxW - 8);
+                  const bx = Math.min(Math.max(16, hoverX - boxW / 2), leftPad + plotW - boxW - 8);
                   const by = Math.max(8, y - boxH - 8);
                   const date = new Date(p.ts);
                   return (
                     <g transform={`translate(${bx} ${by})`}>
                       <rect x={0} y={0} width={boxW} height={boxH} rx={6} ry={6} fill="rgba(2,6,23,0.9)" stroke="rgba(148,163,184,0.3)" />
-                      <text x={8} y={14} fontSize={10} fill="#94a3b8">{`${date.getMonth()+1}/${date.getDate()}`}</text>
+                      <text x={8} y={14} fontSize={10} fill="#94a3b8">{`${date.getUTCMonth()+1}/${date.getUTCDate()}`}</text>
                       <text x={8} y={26} fontSize={12} fill="#e5e7eb">{'$' + p.price.toFixed(2)}</text>
                     </g>
                   );
@@ -223,10 +245,10 @@ export default function ProductBackground({ id }: { id: string }) {
             <text x="140" y="108" fontSize="16" fill="#f59e0b">+1.4%</text>
 
             <text x="16" y="144" fontSize="14" fill="#94a3b8">Low</text>
-            <text x="16" y="166" fontSize="16" fill="#e5e7eb">{low.toFixed(2)}</text>
+            <text x="16" y="166" fontSize="16" fill="#e5e7eb">{'$' + low.toFixed(2)}</text>
 
             <text x="140" y="144" fontSize="14" fill="#94a3b8">High</text>
-            <text x="140" y="166" fontSize="16" fill="#e5e7eb">{high.toFixed(2)}</text>
+            <text x="140" y="166" fontSize="16" fill="#e5e7eb">{'$' + high.toFixed(2)}</text>
 
             <text x="16" y="202" fontSize="14" fill="#94a3b8">Retailers</text>
             <text x="16" y="224" fontSize="16" fill="#e5e7eb">{data.offers.length}</text>
