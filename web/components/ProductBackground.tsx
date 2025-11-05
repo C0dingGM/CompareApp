@@ -175,7 +175,7 @@ export default function ProductBackground({ id }: { id: string }) {
         {/* product panel */}
         <g transform={`translate(${270} ${320})`}>
           <rect x="0" y="0" width={cardW} height={cardH} rx="16" ry="16" fill="rgba(2,6,23,0.55)" stroke="rgba(148,163,184,0.25)" />
-          <foreignObject x={16} y={12} width={120} height={36} style={{ pointerEvents: 'auto' }}>
+          <foreignObject x={cardW - statsW - 126} y={12} width={120} height={36} style={{ pointerEvents: 'auto' }}>
             <button onClick={() => router.push('/')} style={{ width: 110, height: 30, borderRadius: 8, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
               ← Home
             </button>

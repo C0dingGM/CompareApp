@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import ProductBackground from '../../../components/ProductBackground';
 import { getProductWithOffers } from '../../../lib/mock';
 
@@ -8,9 +7,6 @@ export default async function ProductPage({ params }: { params: { id: string } }
   return (
     <div className="space-y-4">
       <ProductBackground id={data.product.id} />
-      <div>
-        <Link href="/" className="text-slate-400 hover:text-slate-200">← Back to Home</Link>
-      </div>
     </div>
   );
 }
