@@ -87,6 +87,13 @@ export default function ProductBackground({ id }: { id: string }) {
 
         <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" />
 
+        {/* global top-right Home button */}
+        <foreignObject x={1440 - 120 - 16} y={16} width={120} height={36} style={{ pointerEvents: 'auto' }}>
+          <button onClick={() => router.push('/')} style={{ width: 110, height: 30, borderRadius: 8, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+            ← Home
+          </button>
+        </foreignObject>
+
         {/* animated cloud layers (CSS-driven) */}
         <g filter="url(#ab-blur)" opacity="0.5">
           <g className="cloud cloud-a" transform="translate(-200,80)">
@@ -175,11 +182,7 @@ export default function ProductBackground({ id }: { id: string }) {
         {/* product panel (centered) */}
         <g transform={`translate(${(1440 - cardW) / 2} ${(900 - cardH) / 2})`}>
           <rect x="0" y="0" width={cardW} height={cardH} rx="16" ry="16" fill="rgba(2,6,23,0.55)" stroke="rgba(148,163,184,0.25)" />
-          <foreignObject x={cardW - statsW - 126} y={12} width={120} height={36} style={{ pointerEvents: 'auto' }}>
-            <button onClick={() => router.push('/')} style={{ width: 110, height: 30, borderRadius: 8, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
-              ← Home
-            </button>
-          </foreignObject>
+
           <text x="20" y="44" fontSize="24" fill="#e5e7eb">{data.product.title}</text>
           <text x="20" y="70" fontSize="14" fill="#a5b4fc">Brand: {data.product.brand}</text>
           <g ref={chartRef as any} transform={`translate(${16} ${92})`} onPointerMove={handleMove} onPointerLeave={handleLeave} style={{ pointerEvents: 'auto' }}>
