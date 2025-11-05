@@ -138,21 +138,6 @@ body {
   100% { opacity: 0.0; }
 }
 
-/* Comet animation: fly across diagonal */
-.comets .comet {
-  animation-name: cometFly;
-  animation-duration: var(--dur);
-  animation-delay: var(--delay);
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  transform-origin: 0 0;
-}
-@keyframes cometFly {
-  0%   { opacity: 0; transform: translate3d(0,0,0); }
-  5%   { opacity: 1; }
-  70%  { opacity: 1; transform: translate3d(1800px, 360px, 0); }
-  100% { opacity: 0; transform: translate3d(2000px, 440px, 0); }
-}
 
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
