@@ -178,24 +178,23 @@ export default function AnimatedBackground() {
           {[0,1,2].map((i) => {
             const delay = i * 2.5;
             return (
-              <g key={i} opacity="0.9">
-                <rect x="-120" y="-3" width="120" height="6" fill="url(#ab-comet)" filter="url(#ab-soft)">
-                  <animate attributeName="x" from="-60" to="1520" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="y" from="80" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0;1;0.2;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                </rect>
-                <rect x="-3.5" y="-3.5" width="7" height="7" fill="#fde047" filter="url(#ab-soft)">
-                  <animate attributeName="x" from="-60" to="1520" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="y" from="80" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0;1;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                </rect>
-                {/* tight glow immediately behind head */}
-                <rect x="-20" y="-2.5" width="20" height="5" fill="#fde047" opacity="0.9" filter="url(#ab-soft)">
-                  <animate attributeName="x" from="-60" to="1520" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="y" from="80" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0;0.95;0.4;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                </rect>
-
+              <g key={i} opacity="0.95">
+                {/* group animates position so tail stays attached behind head */}
+                <g>
+                  <animateTransform attributeName="transform" type="translate" from="-60 80" to="1520 780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  {/* long gradient tail anchored behind head */}
+                  <rect x="-140" y="-4" width="140" height="8" fill="url(#ab-comet)" filter="url(#ab-soft)">
+                    <animate attributeName="opacity" values="0;1;0.2;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  </rect>
+                  {/* tight bright glow immediately behind head */}
+                  <rect x="-24" y="-4" width="24" height="8" fill="#fde047" opacity="0.9" filter="url(#ab-soft)">
+                    <animate attributeName="opacity" values="0;1;0.7;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  </rect>
+                  {/* head (square) */}
+                  <rect x="-3.5" y="-3.5" width="7" height="7" fill="#fde047" filter="url(#ab-soft)">
+                    <animate attributeName="opacity" values="0;1;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
+                  </rect>
+                </g>
               </g>
             );
           })}
