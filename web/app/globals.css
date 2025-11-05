@@ -128,6 +128,16 @@ body {
 /* Ensure CSS variables drive fading on randomized stars */
 .rand-stars .star {
   animation-name: starTwinkle;
+/* Make twinkle visibly blink */
+@keyframes starTwinkle {
+  0% { opacity: 0.0; }
+  15% { opacity: 0.95; }
+  35% { opacity: 0.15; }
+  55% { opacity: 1; }
+  85% { opacity: 0.1; }
+  100% { opacity: 0.0; }
+}
+
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
   animation-duration: var(--dur);

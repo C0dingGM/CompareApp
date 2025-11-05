@@ -28,16 +28,13 @@ export default function AnimatedBackground() {
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const stars = useMemo(() => {
-    // create random stars across the sky region (top 60%)
-    const N = 90;
-    const rng = (seed: number) => () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
-    const r = rng(123456);
-    return Array.from({ length: N }).map((_, i) => ({
-      x: Math.floor(20 + r() * 1400),
-      y: Math.floor(20 + r() * 520),
-      r: +(0.6 + r() * 1.8).toFixed(2),
-      delay: +(r() * 6).toFixed(2),
-      dur: +(3 + r() * 6).toFixed(2),
+    const N = 120;
+    return Array.from({ length: N }).map(() => ({
+      x: Math.floor(10 + Math.random() * 1420),
+      y: Math.floor(10 + Math.random() * 520),
+      r: +(0.6 + Math.random() * 2.2).toFixed(2),
+      delay: +(Math.random() * 8).toFixed(2),
+      dur: +(2.5 + Math.random() * 6).toFixed(2),
     }));
   }, []);
 
