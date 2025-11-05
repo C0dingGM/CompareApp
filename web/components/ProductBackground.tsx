@@ -142,7 +142,7 @@ export default function ProductBackground({ id }: { id: string }) {
               return (
                 <g key={`yt-${i}`}>
                   <line x1={-4} y1={y} x2={0} y2={y} stroke="rgba(148,163,184,0.35)" />
-                  <text x={-8} y={y + 4} fontSize="10" fill="#94a3b8" textAnchor="end">${'{'}val.toFixed(0){'}'}</text>
+                  <text x={-8} y={y + 4} fontSize="10" fill="#94a3b8" textAnchor="end">{val.toFixed(0)}</text>
                 </g>
               );
             })}
@@ -153,7 +153,8 @@ export default function ProductBackground({ id }: { id: string }) {
                 const t = i / n;
                 const x = t * chartW;
                 const idx = Math.max(0, Math.min((hist?.length || 1) - 1, Math.round(t * ((hist?.length || 1) - 1))));
-                const label = hist[idx]?.ts ? new Date(hist[idx].ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '';
+                const d = hist[idx]?.ts ? new Date(hist[idx].ts) : null;
+                const label = d ? `${d.getMonth()+1}/${d.getDate()}` : '';
                 return (
                   <g key={`xt-${i}`}>
                     <line x1={x} y1={chartH} x2={x} y2={chartH + 4} stroke="rgba(148,163,184,0.35)" />
@@ -169,7 +170,7 @@ export default function ProductBackground({ id }: { id: string }) {
           <g transform={`translate(${cardW - statsW} ${24})`}>
             <rect x="0" y="0" width={statsW - 32} height="252" rx="12" ry="12" fill="rgba(255,255,255,0.03)" stroke="rgba(148,163,184,0.15)" />
             <text x="16" y="28" fontSize="14" fill="#94a3b8">Current price</text>
-            <text x="16" y="50" fontSize="22" fontWeight="700" fill="#22d3ee">${'{'}current.toFixed(2){'}'}</text>
+            <text x="16" y="50" fontSize="22" fontWeight="700" fill="#22d3ee">{'$' + current.toFixed(2)}</text>
 
             <text x="16" y="86" fontSize="14" fill="#94a3b8">24h change</text>
             <text x="16" y="108" fontSize="16" fill="#34d399">-2.1%</text>
@@ -178,13 +179,13 @@ export default function ProductBackground({ id }: { id: string }) {
             <text x="140" y="108" fontSize="16" fill="#f59e0b">+1.4%</text>
 
             <text x="16" y="144" fontSize="14" fill="#94a3b8">Low</text>
-            <text x="16" y="166" fontSize="16" fill="#e5e7eb">${'{'}low.toFixed(2){'}'}</text>
+            <text x="16" y="166" fontSize="16" fill="#e5e7eb">{low.toFixed(2)}</text>
 
             <text x="140" y="144" fontSize="14" fill="#94a3b8">High</text>
-            <text x="140" y="166" fontSize="16" fill="#e5e7eb">${'{'}high.toFixed(2){'}'}</text>
+            <text x="140" y="166" fontSize="16" fill="#e5e7eb">{high.toFixed(2)}</text>
 
             <text x="16" y="202" fontSize="14" fill="#94a3b8">Retailers</text>
-            <text x="16" y="224" fontSize="16" fill="#e5e7eb">${'{'}data.offers.length{'}'}</text>
+            <text x="16" y="224" fontSize="16" fill="#e5e7eb">{data.offers.length}</text>
           </g>
         </g>
       </svg>
