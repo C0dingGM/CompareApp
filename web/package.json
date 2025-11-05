@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev -p 3000",
+    "dev": "node dev-watch.mjs",
     "build": "next build",
+    "build:clean": "bash -c 'rm -rf .next && next build'",
     "start": "next start -p 3000",
     "lint": "eslint ."
   },

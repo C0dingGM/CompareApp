@@ -183,6 +183,10 @@ export default function AnimatedBackground() {
           <filter id="ab-soft" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="8" />
           </filter>
+          <linearGradient id="ab-star" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+          </linearGradient>
         </defs>
 
         {/* gradient backdrop */}
@@ -252,7 +256,7 @@ export default function AnimatedBackground() {
                     {q.trim().length >= 1 && (
                       <div style={{ position: 'absolute', left: 0, right: 0, top: 52, zIndex: 10, background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, maxHeight: 240, overflowY: 'auto', backdropFilter: 'blur(8px)' }}>
                         {(suggestions?.length || 0) > 0 ? suggestions.map((p) => (
-                          <a key={p.id} href={`/products?q=${encodeURIComponent(p.title)}${p.brand ? `&brand=${encodeURIComponent(p.brand)}` : ''}`} style={{ display: 'block', padding: '8px 10px', color: '#eaf2ff', textDecoration: 'none' }}>
+                          <a key={p.id} href={`/product/${p.id}`} style={{ display: 'block', padding: '8px 10px', color: '#eaf2ff', textDecoration: 'none' }}>
                             {p.title} — <span style={{ color: '#a5b4fc' }}>{p.brand}</span>
                           </a>
                         )) : (
@@ -341,6 +345,17 @@ export default function AnimatedBackground() {
               />
               <text x="4" y="6" fontSize="12" fill={["#03111f", "#100a1f", "#052012"][i]}>
                 {["$24", "$19", "$31"][i]}
+
+        {/* shooting stars */}
+        <g opacity="0.9" pointerEvents="none">
+          {[0,1,2,3].map((i) => (
+            <g key={i} className={`shooting-star delay-${i+1}`} transform={`translate(${120 + i*220} ${80 + i*10})`}>
+              <line x1="0" y1="0" x2="42" y2="0" stroke="url(#ab-star)" strokeWidth="2" />
+              <circle cx="0" cy="0" r="1.8" fill="#fff" />
+            </g>
+          ))}
+        </g>
+
               </text>
             </g>
           ))}

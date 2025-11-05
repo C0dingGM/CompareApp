@@ -1,0 +1,14 @@
+The background SVG animation in my React component `ProductBackground` isn’t animating as expected. 
+
+Here’s what’s going on:
+
+1. I’m using <animateTransform> and <animate> inside JSX. These native SVG animation tags often don’t work properly when rendered via React, since JSX can strip or ignore SVG animation attributes like `attributeName`, `dur`, and `repeatCount`.
+2. The blurred circle layers move only a few dozen pixels over 45–60 seconds with low opacity (0.35) and heavy Gaussian blur, which makes the motion practically invisible.
+3. The "moving lines" use <animate attributeName="stroke-dashoffset"> but never set a strokeDasharray, so the offset animation has no visible effect.
+
+Please fix this by:
+- Making the animations React-safe (prefer CSS keyframes or motion transforms instead of <animateTransform>).
+- Making the movement speed and opacity visible enough to confirm the animation works.
+- Adding `strokeDasharray` to the paths so the dashed-line motion is visible.
+
+Output a modified version of my component with visible, React-compatible animations that resemble the original motion.

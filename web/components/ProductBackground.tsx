@@ -23,8 +23,8 @@ export default function ProductBackground({ id }: { id: string }) {
       <svg viewBox="0 0 1440 900" preserveAspectRatio="none" className="w-full h-full">
         <defs>
           <linearGradient id="ab-grad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.15" />
-            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.15" />
+            <stop className="pb-grad-1" offset="0%" stopColor="#0ea5e9" stopOpacity="0.18" />
+            <stop className="pb-grad-2" offset="100%" stopColor="#8b5cf6" stopOpacity="0.18" />
           </linearGradient>
           <filter id="ab-blur" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="20" />
@@ -36,27 +36,54 @@ export default function ProductBackground({ id }: { id: string }) {
 
         <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" />
 
-        <g filter="url(#ab-blur)" opacity="0.35">
-          <g transform="translate(-200,80)">
-            <animateTransform attributeName="transform" type="translate" values="0,0; 80,0; 0,0" dur="45s" repeatCount="indefinite" additive="sum" />
+        {/* animated cloud layers (CSS-driven) */}
+        <g filter="url(#ab-blur)" opacity="0.5">
+          <g className="cloud cloud-a" transform="translate(-200,80)">
             <circle cx="200" cy="80" r="80" fill="#94a3b8" />
             <circle cx="270" cy="90" r="60" fill="#94a3b8" />
             <circle cx="140" cy="100" r="50" fill="#94a3b8" />
           </g>
-          <g transform="translate(1000,140) scale(1.2)">
-            <animateTransform attributeName="transform" type="translate" values="-40,0; 40,0; -40,0" dur="60s" repeatCount="indefinite" additive="sum" />
+          <g className="cloud cloud-b" transform="translate(1000,140) scale(1.2)">
             <circle cx="200" cy="80" r="70" fill="#94a3b8" />
             <circle cx="260" cy="90" r="50" fill="#94a3b8" />
             <circle cx="140" cy="100" r="45" fill="#94a3b8" />
           </g>
-          <g transform="translate(300,200) scale(0.9)">
-            <animateTransform attributeName="transform" type="translate" values="-30,0; 30,0; -30,0" dur="55s" repeatCount="indefinite" additive="sum" />
+          <g className="cloud cloud-c" transform="translate(300,200) scale(0.9)">
             <circle cx="200" cy="80" r="60" fill="#94a3b8" />
             <circle cx="260" cy="90" r="45" fill="#94a3b8" />
             <circle cx="140" cy="100" r="40" fill="#94a3b8" />
           </g>
         </g>
 
+        {/* distant city skyline */}
+        <g transform="translate(0,600)" opacity="0.25">
+          <g fill="#0a1220">
+            <rect x="30" y="20" width="50" height="140" />
+            <rect x="110" y="0" width="70" height="160" />
+            <rect x="200" y="35" width="90" height="125" />
+            <rect x="320" y="10" width="60" height="150" />
+            <rect x="410" y="25" width="80" height="135" />
+            <rect x="520" y="0" width="70" height="165" />
+            <rect x="620" y="40" width="90" height="120" />
+            <rect x="730" y="10" width="70" height="150" />
+            <rect x="820" y="30" width="100" height="130" />
+            <rect x="940" y="0" width="65" height="165" />
+            <rect x="1020" y="45" width="85" height="120" />
+            <rect x="1120" y="20" width="70" height="145" />
+            <rect x="1210" y="35" width="90" height="130" />
+            <rect x="1320" y="5" width="60" height="160" />
+          </g>
+          <g className="ab-twinkles">
+            {Array.from({ length: 24 }).map((_, i) => {
+              const x = 40 + ((i * 55) % 1360);
+              const y = 8 + ((i * 19) % 140);
+              const s = 1 + (i % 2);
+              return <rect key={i} x={x} y={y} width={s} height={s} fill="#fde68a" opacity="0.5" className={`tw-${i % 7}`} />;
+            })}
+          </g>
+        </g>
+
+        {/* foreground skyline */}
         <g transform="translate(0,620)" opacity="0.9">
           <rect x="0" y="80" width="1440" height="200" fill="#0b1220" />
           <g fill="#0f172a">
@@ -87,19 +114,14 @@ export default function ProductBackground({ id }: { id: string }) {
           </g>
         </g>
 
-        <g stroke="#22d3ee" strokeWidth="2" fill="none" opacity="0.5">
-          <path className="ab-line" d="M220 640 C 420 560, 720 720, 960 660">
-            <animate attributeName="stroke-dashoffset" values="0;-2000" dur="8s" repeatCount="indefinite" />
-          </path>
-          <path className="ab-line" d="M420 680 C 600 620, 820 600, 1200 640" stroke="#a78bfa">
-            <animate attributeName="stroke-dashoffset" values="0;-2000" dur="10s" repeatCount="indefinite" />
-          </path>
-          <path className="ab-line" d="M140 700 C 360 640, 540 760, 820 720" stroke="#34d399">
-            <animate attributeName="stroke-dashoffset" values="0;-2000" dur="12s" repeatCount="indefinite" />
-          </path>
+        {/* animated dashed lines */}
+        <g stroke="#22d3ee" strokeWidth="2" fill="none" opacity="0.6">
+          <path className="ab-line" style={{ strokeDasharray: '10 8', animation: 'dashMove 8s linear infinite' }} d="M220 640 C 420 560, 720 720, 960 660" />
+          <path className="ab-line" style={{ strokeDasharray: '10 8', animation: 'dashMove 10s linear infinite' }} d="M420 680 C 600 620, 820 600, 1200 640" stroke="#a78bfa" />
+          <path className="ab-line" style={{ strokeDasharray: '10 8', animation: 'dashMove 12s linear infinite' }} d="M140 700 C 360 640, 540 760, 820 720" stroke="#34d399" />
         </g>
 
-        {/* Product panel in place of search */}
+        {/* product panel */}
         <g transform={`translate(${270} ${320})`}>
           <rect x="0" y="0" width={cardW} height={cardH} rx="16" ry="16" fill="rgba(2,6,23,0.55)" stroke="rgba(148,163,184,0.25)" />
           <text x="20" y="44" fontSize="24" fill="#e5e7eb">{data.product.title}</text>

@@ -88,3 +88,42 @@ body {
 .ab-twinkles .tw-5 { animation-delay: 2s; }
 .ab-twinkles .tw-6 { animation-delay: 2.4s; }
 @keyframes twinkle { 0%,100% { opacity: 0.15; } 50% { opacity: 0.7; } }
+
+/* ProductBackground gradient animation */
+.pb-grad-1, .pb-grad-2 { animation: pbGradShift 16s ease-in-out infinite; }
+@keyframes pbGradShift {
+  0%   { stop-color: #0ea5e9; }
+  33%  { stop-color: #8b5cf6; }
+  66%  { stop-color: #f97316; }
+  100% { stop-color: #0ea5e9; }
+}
+
+/* Moving dashed line animation */
+@keyframes dashMove { to { stroke-dashoffset: -2000; } }
+
+/* Cloud layer motion (CSS instead of SVG animateTransform) */
+.cloud { animation: cloudDrift 28s ease-in-out infinite alternate; }
+.cloud-b { animation-duration: 36s; }
+.cloud-c { animation-duration: 32s; }
+@keyframes cloudDrift {
+  from { transform: translateX(-20px); }
+
+/* Shooting stars */
+.shooting-star { opacity: 0; animation: shoot 6s linear infinite; }
+.shooting-star.delay-1 { animation-delay: 1s; }
+.shooting-star.delay-2 { animation-delay: 2.2s; }
+.shooting-star.delay-3 { animation-delay: 3.5s; }
+.shooting-star.delay-4 { animation-delay: 4.8s; }
+@keyframes shoot {
+  0% { opacity: 0; transform: translate3d(0,0,0); }
+  5% { opacity: 1; }
+  35% { opacity: 1; transform: translate3d(260px, 120px, 0); }
+  50% { opacity: 0; transform: translate3d(360px, 160px, 0); }
+  100% { opacity: 0; }
+}
+
+  to   { transform: translateX(60px); }
+}
+
+
+
