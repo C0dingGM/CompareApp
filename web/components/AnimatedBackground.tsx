@@ -178,6 +178,7 @@ export default function AnimatedBackground() {
             </stop>
           </linearGradient>
           <filter id="ab-blur" x="-20%" y="-20%" width="140%" height="140%">
+            
         {/* comet / shooting star (square with fading trail) */}
         <g pointerEvents="none">
           {Array.from({ length: 3 }).map((_, i) => {
@@ -185,13 +186,13 @@ export default function AnimatedBackground() {
             return (
               <g key={i} opacity="0.85">
                 {/* tail */}
-                <rect x="-10" y="-2" width="24" height="4" fill="url(#ab-star)" filter="url(#ab-soft)">
+                <rect x="-120" y="-3" width="120" height="6" fill="url(#ab-comet)" filter="url(#ab-soft)">
                   <animate attributeName="x" from="-50" to="1500" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                   <animate attributeName="y" from="60" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                   <animate attributeName="opacity" values="0;0.85;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                 </rect>
                 {/* head (square) */}
-                <rect x="-3" y="-3" width="6" height="6" fill="#ffffff" filter="url(#ab-soft)">
+                <rect x="-3.5" y="-3.5" width="7" height="7" fill="#fde047" filter="url(#ab-soft)">
                   <animate attributeName="x" from="-50" to="1500" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                   <animate attributeName="y" from="60" to="780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
                   <animate attributeName="opacity" values="0;1;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
@@ -210,18 +211,39 @@ export default function AnimatedBackground() {
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
           </linearGradient>
+          <linearGradient id="ab-comet" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#fde047" stopOpacity="0.95" />
+            <stop offset="100%" stopColor="#fde047" stopOpacity="0" />
+          </linearGradient>
         </defs>
 
         {/* gradient backdrop */}
 
-        {/* shooting stars (more frequent) */}
-        <g opacity="0.95" pointerEvents="none">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <g key={i} className={`shooting-star delay-${(i%6)+1}`} transform={`translate(${80 + (i%6)*220} ${60 + (i%4)*70})`}>
-              <line x1="0" y1="0" x2="64" y2="0" stroke="url(#ab-star)" strokeWidth="2.5" />
-              <circle cx="0" cy="0" r="2.2" fill="#fff" />
-            </g>
-          ))}
+        {/* comet / shooting stars */}
+        <g pointerEvents="none">
+          {Array.from({ length: 3 }).map((_, i) => {
+            const delay = i * 3; // staggered start
+            return (
+              <g key={i} opacity="0.8">
+                {/* tail */}
+                <rect
+                  x="-10" y="-2" width="20" height="4"
+                  fill="url(#ab-star)"
+                  filter="url(#ab-soft)"
+                >
+                  <animate attributeName="x" from="-50" to="1500" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="y" from="50" to="800" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0;0.8;0" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
+                </rect>
+                {/* head */}
+                <circle cx="0" cy="0" r="4" fill="#8f3131ff" filter="url(#ab-soft)">
+                  <animate attributeName="cx" from="-50" to="1500" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="cy" from="50" to="800" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0;1;0" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
+                </circle>
+              </g>
+            );
+          })}
         </g>
 
         <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" pointerEvents="none" />
