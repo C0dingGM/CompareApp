@@ -11,7 +11,7 @@ export default function ProductBackground({ id }: { id: string }) {
 
   const cardW = 900, cardH = 300;
   const statsW = 300;
-  const chartW = cardW - statsW - 32, chartH = 140;
+  const chartW = cardW - statsW - 32, chartH = 170;
   const leftPad = 36, rightPad = 8;
   const plotW = Math.max(1, chartW - leftPad - rightPad);
   const low = prices.length ? Math.min(...prices) : current;
