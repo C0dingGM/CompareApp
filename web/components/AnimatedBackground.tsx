@@ -172,34 +172,8 @@ export default function AnimatedBackground() {
             </stop>
           </linearGradient>
           <filter id="ab-blur" x="-20%" y="-20%" width="140%" height="140%">
-            
-        {/* comet / shooting star (square with fading trail) */}
-        <g pointerEvents="none">
-          {[0,1,2].map((i) => {
-            const delay = i * 2.5;
-            return (
-              <g key={i} opacity="0.95">
-                {/* group animates position so tail stays attached behind head */}
-                <g>
-                  <animateTransform attributeName="transform" type="translate" from="-60 80" to="1520 780" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  {/* long gradient tail anchored behind head */}
-                  <rect x="-140" y="-4" width="140" height="8" fill="url(#ab-comet)" filter="url(#ab-soft)">
-                    <animate attributeName="opacity" values="0;1;0.2;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  </rect>
-                  {/* tight bright glow immediately behind head */}
-                  <rect x="-24" y="-4" width="24" height="8" fill="#fde047" opacity="0.9" filter="url(#ab-soft)">
-                    <animate attributeName="opacity" values="0;1;0.7;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  </rect>
-                  {/* head (square) */}
-                  <rect x="-3.5" y="-3.5" width="7" height="7" fill="#fde047" filter="url(#ab-soft)">
-                    <animate attributeName="opacity" values="0;1;0" dur="9s" begin={`${delay}s`} repeatCount="indefinite" />
-                  </rect>
-                </g>
-              </g>
-            );
-          })}
-        </g>
-
+            <feFlood floodColor="#000000" floodOpacity="0.5" />
+            <feComposite in2="SourceGraphic" operator="in" />
             <feGaussianBlur stdDeviation="20" />
           </filter>
           <filter id="ab-soft" x="-20%" y="-20%" width="140%" height="140%">
@@ -217,32 +191,67 @@ export default function AnimatedBackground() {
 
         {/* gradient backdrop */}
 
-        {/* comet / shooting stars */}
-        <g pointerEvents="none">
-          {Array.from({ length: 3 }).map((_, i) => {
-            const delay = i * 5 ; // staggered start
-            return (
-              <g key={i} opacity="0.8">
-                {/* tail */}
-                <rect
-                  x="-10" y="-2" width="20" height="4"
-                  fill="url(#ab-star)"
-                  filter="url(#ab-soft)"
-                >
-                  <animate attributeName="x" from="-50" to="1500" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="y" from="50" to="800" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0;0.8;0" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
-                </rect>
-                {/* head */}
-                <circle cx="0" cy="0" r="4" fill="#8f3131ff" filter="url(#ab-soft)">
-                  <animate attributeName="cx" from="-50" to="1500" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="cy" from="50" to="800" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0;1;0" dur="8s" begin={`${delay}s`} repeatCount="indefinite" />
-                </circle>
-              </g>
-            );
-          })}
-        </g>
+       {/* comet / shooting stars with curved tapering tails */}
+<g pointerEvents="none">
+  {Array.from({ length: 5 }).map((_, i) => {
+    const delay = i * 3; // staggered start
+    const startX = -Math.random() * 200; // start slightly offscreen
+    const startY = Math.random() * 400;  // random vertical position in upper half of screen
+    const endX = 1600 + Math.random() * 200; 
+    const endY = 400 + Math.random() * 500; // random end position further down
+    return (
+      <g key={i}>
+        {/* animate the entire group */}
+        <animateTransform
+          attributeName="transform"
+          type="translate"
+          from={`${startX} ${startY}`}
+          to={`${endX} ${endY}`}
+          dur={`${6 + Math.random() * 4}s`} // random speed
+          begin={`${Math.random() * 5}s`} // random start delay
+          repeatCount="indefinite"
+        />
+
+        {/* comet tail: curved path tapering behind the head */}
+        <path
+          d="M0,0 C-60,-10 -120,-20 -180,-40"
+          stroke="url(#ab-comet)"
+          strokeWidth="6"
+          fill="none"
+          strokeLinecap="round"
+          filter="url(#ab-soft)"
+        >
+          <animate
+            attributeName="opacity"
+            values="0;0.6;0"
+            dur="8s"
+            begin={`${delay}s`}
+            repeatCount="indefinite"
+          />
+        </path>
+
+        {/* comet head */}
+        <circle
+          cx="0"
+          cy="0"
+          r="4"
+          fill="#fde047"
+          filter="url(#ab-soft)"
+        >
+          <animate
+            attributeName="opacity"
+            values="0;1;0"
+            dur="8s"
+            begin={`${delay}s`}
+            repeatCount="indefinite"
+          />
+        </circle>
+      </g>
+    );
+  })}
+</g>
+
+
 
         <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" pointerEvents="none" />
 
