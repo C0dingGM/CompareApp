@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
@@ -12,9 +12,11 @@ export default function SignInPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    const res = await signIn("credentials", { redirect: false, username, password });
+    // ensure session switches accounts by clearing any existing session first
+    await signOut({ redirect: false });
+    const res = await signIn("credentials", { redirect: false, username, password, callbackUrl: "/" });
     if (res?.error) setError(res.error || "Invalid credentials");
-    else router.push("/");
+    else router.refresh();
   };
 
   return (
