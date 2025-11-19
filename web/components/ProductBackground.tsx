@@ -38,7 +38,7 @@ export default function ProductBackground({ id }: { id: string }) {
       const t = +new Date(hist[i].ts);
       if (t <= target) { found = i; break; }
     }
-    if (found == null) found = Math.max(0, hist.length - 2);
+    if (found == null) found = 0;
     return found;
   };
   const pct = (past: number | null) => past && past !== 0 ? ((current - past) / past) * 100 : null;
@@ -270,10 +270,14 @@ export default function ProductBackground({ id }: { id: string }) {
             <text x="16" y="50" fontSize="22" fontWeight="700" fill="#22d3ee">{'$' + current.toFixed(2)}</text>
 
             <text x="16" y="86" fontSize="14" fill="#94a3b8">24h change</text>
-            <text x="16" y="108" fontSize="16" fill="#34d399">-2.1%</text>
+            <text x="16" y="108" fontSize="16" fill={change24 == null ? "#94a3b8" : change24 >= 0 ? "#34d399" : "#f43f5e"}>
+              {change24 == null ? "—" : `${change24 >= 0 ? "+" : ""}${change24.toFixed(1)}%`}
+            </text>
 
             <text x="140" y="86" fontSize="14" fill="#94a3b8">7d change</text>
-            <text x="140" y="108" fontSize="16" fill="#f59e0b">+1.4%</text>
+            <text x="140" y="108" fontSize="16" fill={change7 == null ? "#94a3b8" : change7 >= 0 ? "#34d399" : "#f43f5e"}>
+              {change7 == null ? "—" : `${change7 >= 0 ? "+" : ""}${change7.toFixed(1)}%`}
+            </text>
 
             <text x="16" y="144" fontSize="14" fill="#94a3b8">Low</text>
             <text x="16" y="166" fontSize="16" fill="#e5e7eb">{'$' + low.toFixed(2)}</text>
