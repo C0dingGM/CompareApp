@@ -7,7 +7,7 @@ import AuthButtons from '../components/AuthButtons';
 
 export default function AppHeader() {
   const pathname = usePathname();
-  if (pathname === '/' || pathname.startsWith('/product')) return null;
+  // always show header
   return (
     <header className="sticky top-4 z-50 mb-6 grid grid-cols-[auto,1fr,auto] items-center rounded-xl border border-slate-800/60 bg-slate-900/40 backdrop-blur supports-[backdrop-filter]:bg-slate-900/30">
       <Link href="/" className="px-4 py-3 text-2xl font-bold bg-gradient-to-r from-sky-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">CompareApp</Link>

@@ -18,10 +18,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Removed QueryProvider to avoid vendor chunk error */}
         <AuthProviders>
           <div className="relative z-10 max-w-5xl mx-auto px-4 py-4">
-            {/* <AppHeader /> header hidden on homepage by component */}
-
-// Add a simple sign-in page
-
+            <AppHeader />
             {children}
           </div>
         </AuthProviders>
