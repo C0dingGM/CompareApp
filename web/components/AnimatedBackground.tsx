@@ -2,6 +2,7 @@
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 export default function AnimatedBackground() {
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -156,7 +157,7 @@ export default function AnimatedBackground() {
   };
 
   return (
-    <div className="fixed inset-0 z-30 overflow-hidden">
+    <div className="fixed inset-0 z-0 overflow-hidden">
       <svg
         ref={svgRef}
         onPointerMove={onMove}
@@ -274,7 +275,9 @@ export default function AnimatedBackground() {
                 border: '1px solid rgba(148,163,184,0.3)',
                 background: 'rgba(15,23,42,0.6)', color: '#e5e7eb',
                 fontSize: 12, fontWeight: 600, paddingLeft: 10
-              }}>Hello, {helloName}</div>
+              }}>Hello, {helloName}
+                <button onClick={() => signOut()} style={{ marginLeft: 8, padding: '2px 8px', borderRadius: 6, border: '1px solid rgba(148,163,184,0.3)', background: 'transparent', color: '#e5e7eb' }}>Sign out</button>
+              </div>
             </foreignObject>
           </g>
         )}
