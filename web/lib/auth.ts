@@ -1,13 +1,9 @@
 import type { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { findUser, verifyPassword } from "./userStore";
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -15,10 +11,12 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const username = credentials?.username as string | undefined;
+        const username = (credentials?.username as string | undefined)?.trim();
         const password = credentials?.password as string | undefined;
-        if (username === "demo" && password === "demo") {
-          return { id: "demo", name: "Demo User", email: "demo@example.com" } as any;
+        if (!username || !password) return null;
+        const user = await findUser(username);
+        if (user && verifyPassword(password, user)) {
+          return { id: user.username, name: user.username } as any;
         }
         return null;
       },
