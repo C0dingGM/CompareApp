@@ -27,6 +27,7 @@ export default function AnimatedBackground() {
   const [category, setCategory] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [helloName, setHelloName] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/brands')
@@ -47,6 +48,18 @@ export default function AnimatedBackground() {
       } catch {}
     }, 200);
     return () => { ac.abort(); clearTimeout(t); };
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await fetch('/api/auth/session');
+        if (!r.ok) return;
+        const s = await r.json();
+        const n = s?.user?.name || s?.user?.email || s?.user?.id || null;
+        if (n) setHelloName(n);
+      } catch {}
+    })();
+  }, []);
+
   }, [q, brand, category]);
 
   const submitSearch = async (e?: React.FormEvent) => {
@@ -241,6 +254,19 @@ export default function AnimatedBackground() {
           <animate
             attributeName="opacity"
             values="0;1;0"
+        {/* top-left hello box */}
+        {helloName && (
+          <foreignObject x={16} y={16} width={220} height={36} style={{ pointerEvents: 'auto' }}>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'flex-start',
+              width: 200, height: 30, borderRadius: 8,
+              border: '1px solid rgba(148,163,184,0.3)',
+              background: 'rgba(15,23,42,0.6)', color: '#e5e7eb',
+              fontSize: 12, fontWeight: 600, paddingLeft: 10
+            }}>Hello, {helloName}</div>
+          </foreignObject>
+        )}
+
             dur="8s"
             begin={`${delay}s`}
             repeatCount="indefinite"
