@@ -9,11 +9,7 @@ export default function AuthButtons() {
   if (loading) return null;
 
   if (!session) {
-    return (
-      <Link href="/signin" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">
-        Sign in
-      </Link>
-    );
+    return null;
   }
   return (
     <div className="flex items-center gap-2">

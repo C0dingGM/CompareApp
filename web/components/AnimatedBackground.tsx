@@ -1,8 +1,7 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 
 export default function AnimatedBackground() {
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -29,6 +28,8 @@ export default function AnimatedBackground() {
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [helloName, setHelloName] = useState<string | null>(null);
+  const [loginUser, setLoginUser] = useState("");
+  const [loginPass, setLoginPass] = useState("");
 
   useEffect(() => {
     fetch('/api/brands')
@@ -287,16 +288,17 @@ export default function AnimatedBackground() {
 
 
         <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" pointerEvents="none" />
-        {/* top-right sign-in button */}
-        <foreignObject x={1440 - 120 - 16} y={16} width={120} height={36} style={{ pointerEvents: 'auto' }}>
-          <a href="/signin" style={{
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            width: 110, height: 30, borderRadius: 8,
-            border: '1px solid rgba(148,163,184,0.3)',
-            background: 'rgba(15,23,42,0.6)', color: '#e5e7eb',
-            fontSize: 12, fontWeight: 600, textDecoration: 'none'
-          }}>Sign in</a>
-        </foreignObject>
+        {/* top-right inline sign-in form */}
+        {!helloName && (
+          <foreignObject x={1440 - 380 - 16} y={16} width={380} height={36} style={{ pointerEvents: 'auto' }}>
+            <form onSubmit={async (e) => { e.preventDefault(); await signOut({ redirect: false }); const r = await signIn('credentials', { redirect: false, username: loginUser, password: loginPass }); if (!r?.error) { setHelloName(loginUser); setLoginPass(''); } }}
+              style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <input value={loginUser} onChange={(e)=>setLoginUser(e.target.value)} placeholder="Username" style={{ height: 30, padding: '4px 8px', borderRadius: 6, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb' }} />
+              <input value={loginPass} onChange={(e)=>setLoginPass(e.target.value)} type="password" placeholder="Password" style={{ height: 30, padding: '4px 8px', borderRadius: 6, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb' }} />
+              <button type="submit" style={{ height: 30, padding: '0 10px', borderRadius: 6, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(99,102,241,0.25)', color: '#e5e7eb', fontSize: 12, fontWeight: 600 }}>Sign in</button>
+            </form>
+          </foreignObject>
+        )}
 
 
         {/* clouds */}
@@ -512,15 +514,7 @@ export default function AnimatedBackground() {
         </form>
       </div>
 
-      {/* ---- SIGN IN BUTTON (now safe & correct) ---- */}
-      <div style={{ position: "absolute", top: 56, right: 0 }}>
-        <Link
-          href="/signin"
-          className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors"
-        >
-          Sign in
-        </Link>
-      </div>
+
 
     </div>
   </foreignObject>
