@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function AnimatedBackground() {
@@ -333,6 +333,11 @@ export default function AnimatedBackground() {
                   </button>
                 </div>
               </form>
+            </div>
+            <div style={{ position: 'absolute', top: -56, right: 0 }}>
+              <Link href="/signin" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">
+                Sign in
+              </Link>
             </div>
           </foreignObject>
         </g>
