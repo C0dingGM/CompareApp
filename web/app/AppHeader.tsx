@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ThemeToggle from '../components/ThemeToggle';
 import HeaderSearch from '../components/HeaderSearch';
+import AuthButtons from '../components/AuthButtons';
 
 export default function AppHeader() {
   const pathname = usePathname();
@@ -18,8 +19,9 @@ export default function AppHeader() {
           <a href="https://github.com/C0dingGM/CompareApp" target="_blank" rel="noreferrer" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">GitHub</a>
         </div>
       </nav>
-      <div className="px-2">
+      <div className="px-2 flex items-center gap-2">
         <ThemeToggle />
+        <AuthButtons />
       </div>
     </header>
   );
