@@ -13,18 +13,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: 'WEAK_CREDENTIALS' }, { status: 400 });
     }
 
-    // local file-backed store (keeps existing behavior)
-    await createUser(username.trim(), password);
-
-    // also persist to Supabase
-    const { hash, salt } = hashPassword(password);
+    // require Supabase and insert first to guarantee persistence
     const sb = getSupabase();
-    if (sb) {
-      const { error } = await sb
-        .from('users_simple')
-        .insert({ username: username.trim(), password_hash: hash, password_salt: salt });
-      if (error) console.error('Supabase insert error', error);
+    if (!sb) {
+      return NextResponse.json({ ok: false, error: 'SUPABASE_NOT_CONFIGURED' }, { status: 500 });
     }
+    const { hash, salt } = hashPassword(password);
+    const { error } = await sb
+      .from('users_simple')
+      .insert({ username: username.trim(), password_hash: hash, password_salt: salt });
+    if (error) {
+      const status = error.code === '23505' ? 409 : 500; // unique_violation or generic
+      return NextResponse.json({ ok: false, error: 'SUPABASE_INSERT_FAILED', detail: error.message }, { status });
+    }
+
+    // also keep local store in sync (best-effort)
+    try { await createUser(username.trim(), password); } catch {}
 
     return NextResponse.json({ ok: true });
   } catch (e: any) {
