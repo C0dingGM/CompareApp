@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@prisma/client": "*",
+    "@supabase/supabase-js": "^2.83.0",
     "@tanstack/react-query": "*",
     "axios": "*",
     "clsx": "*",
