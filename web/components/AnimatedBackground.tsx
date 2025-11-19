@@ -48,6 +48,8 @@ export default function AnimatedBackground() {
       } catch {}
     }, 200);
     return () => { ac.abort(); clearTimeout(t); };
+  }, [q, brand, category]);
+
   useEffect(() => {
     (async () => {
       try {
@@ -60,7 +62,6 @@ export default function AnimatedBackground() {
     })();
   }, []);
 
-  }, [q, brand, category]);
 
   const submitSearch = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -254,18 +255,6 @@ export default function AnimatedBackground() {
           <animate
             attributeName="opacity"
             values="0;1;0"
-        {/* top-left hello box */}
-        {helloName && (
-          <foreignObject x={16} y={16} width={220} height={36} style={{ pointerEvents: 'auto' }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'flex-start',
-              width: 200, height: 30, borderRadius: 8,
-              border: '1px solid rgba(148,163,184,0.3)',
-              background: 'rgba(15,23,42,0.6)', color: '#e5e7eb',
-              fontSize: 12, fontWeight: 600, paddingLeft: 10
-            }}>Hello, {helloName}</div>
-          </foreignObject>
-        )}
 
             dur="8s"
             begin={`${delay}s`}
@@ -275,6 +264,21 @@ export default function AnimatedBackground() {
       </g>
     );
   })}
+        {/* top-left hello box */}
+        {helloName && (
+          <g>
+            <foreignObject x={16} y={16} width={220} height={36} style={{ pointerEvents: 'auto' }}>
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'flex-start',
+                width: 200, height: 30, borderRadius: 8,
+                border: '1px solid rgba(148,163,184,0.3)',
+                background: 'rgba(15,23,42,0.6)', color: '#e5e7eb',
+                fontSize: 12, fontWeight: 600, paddingLeft: 10
+              }}>Hello, {helloName}</div>
+            </foreignObject>
+          </g>
+        )}
+
 </g>
 
 
