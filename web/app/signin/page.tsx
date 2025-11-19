@@ -20,8 +20,9 @@ export default function SignInPage() {
   return (
     <div className="max-w-md mx-auto mt-20 p-6 rounded-xl border border-slate-800/60 bg-slate-900/40">
       <h1 className="text-xl font-semibold mb-4">Sign in</h1>
-      <button onClick={() => signIn("google")}
-        className="w-full mb-4 px-4 py-2 rounded-md border border-slate-700 hover:bg-white/5">Continue with Google</button>
+      <button onClick={() => router.push("/google-signin")} className="w-full mb-4 px-4 py-2 rounded-md border border-slate-700 hover:bg-white/5">
+        Continue with Google
+      </button>
 
       <div className="my-4 text-center opacity-70 text-sm">or</div>
 
