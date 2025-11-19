@@ -1,5 +1,6 @@
 "use client";
-import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 
 export default function AuthButtons() {
   const { data: session, status } = useSession();
@@ -9,9 +10,9 @@ export default function AuthButtons() {
 
   if (!session) {
     return (
-      <button onClick={() => signIn("google")} className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">
-        Sign in with Google
-      </button>
+      <Link href="/signin" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">
+        Sign in
+      </Link>
     );
   }
   return (
