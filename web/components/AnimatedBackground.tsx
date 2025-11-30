@@ -3,7 +3,11 @@ import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn, signOut } from "next-auth/react";
 
-export default function AnimatedBackground() {
+interface AnimatedBackgroundProps {
+  onWishlistClick?: () => void;
+}
+
+export default function AnimatedBackground({ onWishlistClick }: AnimatedBackgroundProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [drag, setDrag] = useState<{ i: number; startX: number; startY: number; ox: number; oy: number } | null>(null);
   const initial = [
@@ -30,6 +34,7 @@ export default function AnimatedBackground() {
   const [helloName, setHelloName] = useState<string | null>(null);
   const [loginUser, setLoginUser] = useState("");
   const [loginPass, setLoginPass] = useState("");
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/brands')
@@ -290,12 +295,15 @@ export default function AnimatedBackground() {
         <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" pointerEvents="none" />
         {/* top-right inline sign-in form */}
         {!helloName && (
-          <foreignObject x={1440 - 380 - 16} y={16} width={380} height={36} style={{ pointerEvents: 'auto' }}>
-            <form onSubmit={async (e) => { e.preventDefault(); await signOut({ redirect: false }); const r = await signIn('credentials', { redirect: false, username: loginUser, password: loginPass }); if (!r?.error) { setHelloName(loginUser); setLoginPass(''); } }}
-              style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <input value={loginUser} onChange={(e)=>setLoginUser(e.target.value)} placeholder="Username" style={{ height: 30, padding: '4px 8px', borderRadius: 6, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb' }} />
-              <input value={loginPass} onChange={(e)=>setLoginPass(e.target.value)} type="password" placeholder="Password" style={{ height: 30, padding: '4px 8px', borderRadius: 6, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb' }} />
-              <button type="submit" style={{ height: 30, padding: '0 10px', borderRadius: 6, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(99,102,241,0.25)', color: '#e5e7eb', fontSize: 12, fontWeight: 600 }}>Sign in</button>
+          <foreignObject x={1440 - 380 - 16} y={16} width={380} height={80} style={{ pointerEvents: 'auto' }}>
+            <form onSubmit={async (e) => { e.preventDefault(); setLoginError(null); await signOut({ redirect: false }); const r = await signIn('credentials', { redirect: false, username: loginUser, password: loginPass }); if (r?.ok) { setHelloName(loginUser); setLoginPass(''); } else { setLoginError('Invalid username or password'); } }}
+              style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <input value={loginUser} onChange={(e)=>{setLoginUser(e.target.value); setLoginError(null);}} placeholder="Username" style={{ height: 30, padding: '4px 8px', borderRadius: 6, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb' }} />
+                <input value={loginPass} onChange={(e)=>{setLoginPass(e.target.value); setLoginError(null);}} type="password" placeholder="Password" style={{ height: 30, padding: '4px 8px', borderRadius: 6, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(15,23,42,0.6)', color: '#e5e7eb' }} />
+                <button type="submit" style={{ height: 30, padding: '0 10px', borderRadius: 6, border: '1px solid rgba(148,163,184,0.3)', background: 'rgba(99,102,241,0.25)', color: '#e5e7eb', fontSize: 12, fontWeight: 600 }}>Sign in</button>
+              </div>
+              {loginError && <div style={{ fontSize: 12, color: '#f87171', paddingLeft: 4 }}>{loginError}</div>}
             </form>
           </foreignObject>
         )}
@@ -519,6 +527,32 @@ export default function AnimatedBackground() {
     </div>
   </foreignObject>
 </g>
+
+        {/* Wishlist button */}
+        <foreignObject x="500" y="510" width="440" height="60">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <a href="/products" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '12px 20px', borderRadius: 12,
+              background: 'rgba(14, 165, 233, 0.9)',
+              color: '#fff', fontWeight: 600, fontSize: 15,
+              textDecoration: 'none', border: '1px solid rgba(255,255,255,0.1)',
+              backdropFilter: 'blur(8px)'
+            }}>View all products</a>
+            <button onClick={onWishlistClick} style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '12px 20px', borderRadius: 12,
+              background: 'rgba(236, 72, 153, 0.9)',
+              color: '#fff', fontWeight: 600, fontSize: 15,
+              border: '1px solid rgba(255,255,255,0.1)',
+              backdropFilter: 'blur(8px)',
+              cursor: 'pointer'
+            }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+              My Wishlist
+            </button>
+          </div>
+        </foreignObject>
 
         {/* skyline silhouettes */}
         <g transform="translate(0,620)" opacity="0.9" pointerEvents="none">

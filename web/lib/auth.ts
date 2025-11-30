@@ -13,15 +13,25 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         const username = (credentials?.username as string | undefined)?.trim();
         const password = credentials?.password as string | undefined;
-        if (!username || !password) return null;
-        const user = await findUser(username);
-        if (user && verifyPassword(password, user)) {
-          return { id: user.username, name: user.username } as any;
+        if (!username || !password) {
+          throw new Error("Please provide both username and password");
         }
-        return null;
+        const user = await findUser(username);
+        if (!user) {
+          throw new Error("No user found with this username");
+        }
+        if (!verifyPassword(password, user)) {
+          throw new Error("Incorrect password");
+        }
+        return { id: user.username, name: user.username } as any;
       },
     }),
   ],
   pages: { signIn: "/signin" },
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async signIn() {
+      return true;
+    },
+  },
 };

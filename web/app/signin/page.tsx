@@ -12,11 +12,24 @@ export default function SignInPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    
+    if (!username.trim() || !password) {
+      setError("Please enter both username and password");
+      return;
+    }
+    
     // ensure session switches accounts by clearing any existing session first
     await signOut({ redirect: false });
     const res = await signIn("credentials", { redirect: false, username, password, callbackUrl: "/" });
-    if (res?.error) setError(res.error || "Invalid credentials");
-    else router.refresh();
+    
+    console.log("SignIn Response:", res);
+    
+    if (res?.ok) {
+      router.push("/");
+    } else {
+      // If not ok, there was an error
+      setError("Invalid username or password. Please try again.");
+    }
   };
 
   return (

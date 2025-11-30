@@ -2,8 +2,12 @@
 import { usePathname } from "next/navigation";
 import AnimatedBackground from "./AnimatedBackground";
 
-export default function ConditionalBackground() {
+interface ConditionalBackgroundProps {
+  onWishlistClick?: () => void;
+}
+
+export default function ConditionalBackground({ onWishlistClick }: ConditionalBackgroundProps) {
   const pathname = usePathname();
-  if (pathname.startsWith("/products") || pathname.startsWith("/product")) return null;
-  return <AnimatedBackground />;
+  if (pathname.startsWith("/products") || pathname.startsWith("/product") || pathname.startsWith("/wishlist")) return null;
+  return <AnimatedBackground onWishlistClick={onWishlistClick} />;
 }
