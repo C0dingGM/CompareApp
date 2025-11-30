@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getProductWithOffers } from "../lib/mock";
+import AddToWishlistButton from "./AddToWishlistButton";
 
 export default function ProductBackground({ id }: { id: string }) {
   const router = useRouter();
@@ -74,7 +75,7 @@ export default function ProductBackground({ id }: { id: string }) {
     <div className="fixed inset-0 z-0 pointer-events-none">
       <svg viewBox="0 0 1440 900" preserveAspectRatio="none" className="w-full h-full">
         <defs>
-          <linearGradient id="ab-grad" x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id="ab-grad" x1="0" y="0" x2="1" y2="1">
             <stop className="pb-grad-1" offset="0%" stopColor="#0ea5e9" stopOpacity="0.18" />
             <stop className="pb-grad-2" offset="100%" stopColor="#8b5cf6" stopOpacity="0.18" />
           </linearGradient>
@@ -84,6 +85,20 @@ export default function ProductBackground({ id }: { id: string }) {
           <filter id="ab-soft" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="8" />
           </filter>
+          <style>{`
+            @keyframes cloudDriftA { 0% { transform: translate(-200px,80px); } 50% { transform: translate(-150px,90px); } 100% { transform: translate(-200px,80px); } }
+            @keyframes cloudDriftB { 0% { transform: translate(1000px,140px) scale(1.2); } 50% { transform: translate(1035px,150px) scale(1.22); } 100% { transform: translate(1000px,140px) scale(1.2); } }
+            @keyframes cloudDriftC { 0% { transform: translate(300px,200px) scale(0.9); } 50% { transform: translate(270px,215px) scale(0.92); } 100% { transform: translate(300px,200px) scale(0.9); } }
+            .cloud-a { animation: cloudDriftA 18s ease-in-out infinite; }
+            .cloud-b { animation: cloudDriftB 26s ease-in-out infinite; }
+            .cloud-c { animation: cloudDriftC 22s ease-in-out infinite; }
+            @keyframes dashMoveBlue { to { stroke-dashoffset: -900; } }
+            @keyframes dashMoveViolet { to { stroke-dashoffset: -900; } }
+            @keyframes dashMoveGreen { to { stroke-dashoffset: -900; } }
+            .dash-blue { stroke-dasharray: 16 11; animation: dashMoveBlue 14s linear infinite; }
+            .dash-violet { stroke-dasharray: 16 11; animation: dashMoveViolet 18s linear infinite; }
+            .dash-green { stroke-dasharray: 16 11; animation: dashMoveGreen 22s linear infinite; }
+          `}</style>
         </defs>
 
         <rect x="0" y="0" width="1440" height="900" fill="url(#ab-grad)" />
@@ -192,10 +207,10 @@ export default function ProductBackground({ id }: { id: string }) {
         </g>
 
         {/* animated dashed lines */}
-        <g stroke="#22d3ee" strokeWidth="2" fill="none" opacity="0.6">
-          <path className="ab-line" style={{ strokeDasharray: '10 8', animation: 'dashMove 8s linear infinite' }} d="M220 640 C 420 560, 720 720, 960 660" />
-          <path className="ab-line" style={{ strokeDasharray: '10 8', animation: 'dashMove 10s linear infinite' }} d="M420 680 C 600 620, 820 600, 1200 640" stroke="#a78bfa" />
-          <path className="ab-line" style={{ strokeDasharray: '10 8', animation: 'dashMove 12s linear infinite' }} d="M140 700 C 360 640, 540 760, 820 720" stroke="#34d399" />
+        <g strokeWidth="2" fill="none" opacity="0.6">
+          <path className="dash-blue" d="M220 640 C 420 560, 720 720, 960 660" stroke="#22d3ee" />
+          <path className="dash-violet" d="M420 680 C 600 620, 820 600, 1200 640" stroke="#a78bfa" />
+          <path className="dash-green" d="M140 700 C 360 640, 540 760, 820 720" stroke="#34d399" />
         </g>
 
         {/* product panel (centered) */}
@@ -203,7 +218,16 @@ export default function ProductBackground({ id }: { id: string }) {
           <rect x="0" y="0" width={cardW} height={cardH} rx="16" ry="16" fill="rgba(2,6,23,0.55)" stroke="rgba(148,163,184,0.25)" />
 
           <text x="20" y="44" fontSize="24" fill="#e5e7eb">{data.product.title}</text>
+          
+          {/* Wishlist button to the right of title */}
+          <foreignObject x="320" y="22" width="220" height="50" style={{ pointerEvents: 'auto' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <AddToWishlistButton productId={id} />
+            </div>
+          </foreignObject>
+          
           <text x="20" y="70" fontSize="14" fill="#a5b4fc">Brand: {data.product.brand}</text>
+
           <g ref={chartRef as any} transform={`translate(${16} ${92})`} onPointerMove={handleMove} onPointerLeave={handleLeave} style={{ pointerEvents: 'auto' }}>
             <rect x="0" y="0" width={chartW} height={chartH} fill="rgba(255,255,255,0.02)" stroke="rgba(148,163,184,0.15)" />
             {/* axes (with left padding so y-axis sits inside panel) */}

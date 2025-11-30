@@ -100,3 +100,61 @@ export function getProductWithOffers(id: string) {
 export function getAllProducts() {
   return products;
 }
+
+// Wishlist mock data
+export type WishlistItem = {
+  id: string;
+  productId: string;
+  targetPrice?: number;
+  targetDate?: string;
+  addedAt: string;
+};
+
+const wishlists = new Map<string, WishlistItem[]>();
+
+export function getUserWishlist(userId: string): WishlistItem[] {
+  return wishlists.get(userId) || [];
+}
+
+export function addToWishlist(userId: string, productId: string, targetPrice?: number, targetDate?: string): WishlistItem {
+  const userWishlist = wishlists.get(userId) || [];
+  const existing = userWishlist.find(item => item.productId === productId);
+  if (existing) {
+    existing.targetPrice = targetPrice;
+    existing.targetDate = targetDate;
+    return existing;
+  }
+  const newItem: WishlistItem = {
+    id: `w${Date.now()}_${Math.random().toString(36).slice(2)}`,
+    productId,
+    targetPrice,
+    targetDate,
+    addedAt: new Date().toISOString()
+  };
+  userWishlist.push(newItem);
+  wishlists.set(userId, userWishlist);
+  return newItem;
+}
+
+export function removeFromWishlist(userId: string, itemId: string): boolean {
+  const userWishlist = wishlists.get(userId) || [];
+  const index = userWishlist.findIndex(item => item.id === itemId);
+  if (index === -1) return false;
+  userWishlist.splice(index, 1);
+  wishlists.set(userId, userWishlist);
+  return true;
+}
+
+export function updateWishlistItem(userId: string, itemId: string, targetPrice?: number, targetDate?: string): WishlistItem | null {
+  const userWishlist = wishlists.get(userId) || [];
+  const item = userWishlist.find(i => i.id === itemId);
+  if (!item) return null;
+  item.targetPrice = targetPrice;
+  item.targetDate = targetDate;
+  return item;
+}
+
+export function isInWishlist(userId: string, productId: string): boolean {
+  const userWishlist = wishlists.get(userId) || [];
+  return userWishlist.some(item => item.productId === productId);
+}

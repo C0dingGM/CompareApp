@@ -1,6 +1,7 @@
 "use client";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Heart } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 import HeaderSearch from '../components/HeaderSearch';
 import AuthButtons from '../components/AuthButtons';
@@ -16,6 +17,10 @@ export default function AppHeader() {
         <div className="hidden md:flex items-center gap-1 sm:gap-2">
           <Link href="/" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">Home</Link>
           <Link href="/products" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">Products</Link>
+          <Link href="/wishlist" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors flex items-center gap-1">
+            <Heart className="w-4 h-4" />
+            Wishlist
+          </Link>
           <a href="https://github.com/C0dingGM/CompareApp" target="_blank" rel="noreferrer" className="px-3 py-2 rounded-md text-sm font-medium border border-transparent hover:bg-slate-900/5 dark:hover:bg-white/5 transition-colors">GitHub</a>
         </div>
       </nav>
