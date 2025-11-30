@@ -2,7 +2,8 @@
 
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import { Heart, X, Trash2 } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { X, Trash2 } from 'lucide-react';
 
 interface WishlistItem {
   id: string;
@@ -25,9 +26,23 @@ interface WishlistWidgetProps {
 export default function WishlistWidget({ isOpen, onClose }: WishlistWidgetProps) {
   const { data: session } = useSession();
   const [items, setItems] = useState<WishlistItem[]>([]);
-  const [position, setPosition] = useState({ x: window.innerWidth - 420, y: 100 });
+  const [mounted, setMounted] = useState(false);
+  const [position, setPosition] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('wishlist-widget-position');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+      return { x: window.innerWidth - 420, y: 100 };
+    }
+    return { x: 100, y: 100 };
+  });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (session && isOpen) {
@@ -70,15 +85,17 @@ export default function WishlistWidget({ isOpen, onClose }: WishlistWidgetProps)
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
-      setPosition({
+      const newPosition = {
         x: e.clientX - dragOffset.x,
         y: e.clientY - dragOffset.y
-      });
+      };
+      setPosition(newPosition);
     }
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
+    localStorage.setItem('wishlist-widget-position', JSON.stringify(position));
   };
 
   useEffect(() => {
@@ -92,39 +109,55 @@ export default function WishlistWidget({ isOpen, onClose }: WishlistWidgetProps)
     }
   }, [isDragging, dragOffset]);
 
-  if (!isOpen) {
+  if (!isOpen || !mounted) {
     return null;
   }
 
-  return (
+  const widgetContent = (
     <div
       style={{
         position: 'fixed',
-        left: position.x,
-        top: position.y,
-        width: 400,
-        maxHeight: 500,
-        zIndex: 1000
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        width: '400px',
+        maxHeight: '500px',
+        zIndex: 9999,
+        background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(14, 165, 233, 0.1) 100%)',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+        borderRadius: '32px',
+        transform: 'translate3d(0, 0, 0)',
+        willChange: 'transform'
       }}
-      className="bg-slate-900/95 backdrop-blur border border-slate-700 rounded-lg shadow-2xl overflow-hidden"
+      className="backdrop-blur-xl border border-slate-700/50 overflow-hidden"
     >
       <div
         onMouseDown={handleMouseDown}
-        className="px-4 py-3 bg-pink-600 cursor-move flex items-center justify-between"
+        className="px-4 py-3 cursor-move flex items-center justify-between relative"
+        style={{
+          background: 'linear-gradient(90deg, rgba(236, 72, 153, 0.95) 0%, rgba(219, 39, 119, 0.95) 100%)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+          borderTopLeftRadius: '32px',
+          borderTopRightRadius: '32px'
+        }}
       >
-        <div className="flex items-center gap-2">
-          <Heart className="w-5 h-5 fill-white" />
-          <h3 className="font-semibold text-white">My Wishlist</h3>
-        </div>
         <button
           onClick={onClose}
-          className="text-white hover:bg-pink-700 rounded p-1"
+          className="absolute top-2 left-2 text-white hover:bg-pink-700/50 rounded"
+          style={{ padding: '2px' }}
         >
-          <X className="w-5 h-5" />
+          <X className="w-2.5 h-2.5" />
         </button>
+        <div className="flex items-center gap-2 w-full justify-center">
+          <h3 className="font-semibold text-white">My Wishlist</h3>
+        </div>
       </div>
 
-      <div className="p-4 overflow-y-auto" style={{ maxHeight: 420 }}>
+      <div className="p-4 overflow-y-auto" style={{ 
+        maxHeight: 420,
+        background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)',
+        borderBottomLeftRadius: '32px',
+        borderBottomRightRadius: '32px'
+      }}>
         {!session ? (
           <div className="text-center py-8 text-slate-400">
             Sign in to view your wishlist
@@ -136,7 +169,7 @@ export default function WishlistWidget({ isOpen, onClose }: WishlistWidgetProps)
         ) : (
           <div className="space-y-3">
             {items.map((item) => (
-              <div key={item.id} className="bg-slate-800/50 rounded-lg p-3">
+              <div key={item.id} className="bg-slate-800/50 rounded-2xl p-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     {item.product ? (
@@ -177,4 +210,6 @@ export default function WishlistWidget({ isOpen, onClose }: WishlistWidgetProps)
       </div>
     </div>
   );
+
+  return createPortal(widgetContent, document.body);
 }
