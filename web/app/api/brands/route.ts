@@ -1,8 +1,24 @@
 import { NextRequest } from 'next/server';
-import { getBrands, getCategories } from '../../../lib/mock';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 export async function GET(_req: NextRequest) {
-  const items = getBrands();
-  const categories = getCategories();
-  return new Response(JSON.stringify({ items, categories }), { headers: { 'content-type': 'application/json' } });
+  // Get unique brands
+  const { data: products } = await supabase
+    .from('products')
+    .select('brand, category');
+
+  const brands = [...new Set(products?.map(p => p.brand) || [])];
+  const categories = [...new Set(products?.map(p => p.category).filter(Boolean) || [])];
+
+  return new Response(JSON.stringify({ 
+    items: brands, 
+    categories 
+  }), { 
+    headers: { 'content-type': 'application/json' } 
+  });
 }

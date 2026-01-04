@@ -1,13 +1,20 @@
 "use client";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getProductWithOffers } from "../lib/mock";
 import AddToWishlistButton from "./AddToWishlistButton";
 
-export default function ProductBackground({ id }: { id: string }) {
+type ProductData = {
+  product: { id: string; title: string; brand: string };
+  offers: Array<{ price: number; retailer_id: string }>;
+  price_history: Array<{ price: number; ts: string; retailer_id: string }>;
+};
+
+export default function ProductBackground({ id, data }: { id: string; data?: ProductData }) {
   const router = useRouter();
-  const data = getProductWithOffers(id);
+  
+  // Use provided data or return null
   if (!data) return null as any;
+  
   const hist = [...data.price_history].sort((a, b) => +new Date(a.ts) - +new Date(b.ts));
   const prices = hist.map((h) => h.price);
   const current = prices.length ? prices[prices.length - 1] : (data.offers[0]?.price ?? 0);

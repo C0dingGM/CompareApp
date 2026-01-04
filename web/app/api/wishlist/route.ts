@@ -12,10 +12,22 @@ export async function GET() {
   const wishlistItems = getUserWishlist(session.user.name);
   const items = wishlistItems.map(item => {
     const productData = getProductWithOffers(item.productId);
+    
+    // Get current price from offers first, then fall back to latest price history
+    let currentPrice = productData?.offers[0]?.price || null;
+    
+    if (!currentPrice && productData?.price_history && productData.price_history.length > 0) {
+      // Sort by timestamp descending to get the latest price
+      const sortedHistory = [...productData.price_history].sort((a, b) => 
+        new Date(b.ts).getTime() - new Date(a.ts).getTime()
+      );
+      currentPrice = sortedHistory[0].price;
+    }
+    
     return {
       ...item,
       product: productData?.product || null,
-      currentPrice: productData?.offers[0]?.price || null
+      currentPrice
     };
   });
   

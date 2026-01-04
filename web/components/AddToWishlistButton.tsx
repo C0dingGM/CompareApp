@@ -147,8 +147,12 @@ export default function AddToWishlistButton({ productId, initialInWishlist = fal
     <button
       onClick={handleClick}
       disabled={loading}
-      className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors w-[170px] justify-center ${inWishlist ? 'border-pink-400 bg-white text-pink-600' : 'border-slate-300 bg-white text-slate-700 hover:bg-pink-50'}`}
-      title="Add to Wishlist"
+      className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors w-[170px] justify-center ${
+        inWishlist 
+          ? 'border-pink-400 bg-pink-50 text-pink-600' 
+          : 'border-slate-300 bg-white text-slate-700 hover:bg-pink-50'
+      } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+      title={inWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
     >
       <Heart
         className="w-5 h-5 transition-colors"
@@ -156,7 +160,7 @@ export default function AddToWishlistButton({ productId, initialInWishlist = fal
         fill={inWishlist ? '#db2777' : 'none'}
         strokeWidth={2}
       />
-      <span>Add to Wishlist</span>
+      <span>{inWishlist ? 'In Wishlist' : 'Add to Wishlist'}</span>
     </button>
   );
 }
