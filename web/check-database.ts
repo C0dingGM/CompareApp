@@ -5,43 +5,37 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-async function checkDatabase() {
-  console.log('\n📊 Checking database contents...\n');
+async function checkProducts() {
+  console.log('\n📊 Checking all products in database...\n');
   
-  // Check products
-  const { data: products, error: prodError } = await supabase
+  const { data: products, error } = await supabase
     .from('products')
-    .select('*')
-    .limit(10);
+    .select('id, brand, title')
+    .order('id');
   
-  if (prodError) {
-    console.log('❌ Cannot read products:', prodError.message);
-  } else {
-    console.log(`✅ Products in database: ${products?.length || 0}`);
-    products?.forEach(p => {
-      console.log(`   - [${p.id}] ${p.brand} ${p.title?.substring(0, 40)}...`);
-    });
+  if (error) {
+    console.log('❌ Error:', error.message);
+    return;
   }
   
-  // Check offers
-  const { data: offers, error: offerError } = await supabase
-    .from('offers')
-    .select('*')
-    .limit(10);
+  console.log(`Total products: ${products?.length || 0}\n`);
   
-  if (offerError) {
-    console.log('\n❌ Cannot read offers:', offerError.message);
-  } else {
-    console.log(`\n✅ Offers in database: ${offers?.length || 0}`);
-    offers?.slice(0, 5).forEach(o => {
-      console.log(`   - [${o.product_id}] ${o.retailer_id}: $${o.price}`);
-    });
-    if (offers && offers.length > 5) {
-      console.log(`   ... and ${offers.length - 5} more`);
-    }
-  }
+  const realProducts = products?.filter(p => 
+    ['Sony', 'Apple', 'JBL', 'Logitech', 'Samsung', 'Fitbit', 'Manduka', 'Cuisinart', 'Hydro Flask'].includes(p.brand)
+  ) || [];
   
-  console.log('\n');
+  const mockProducts = products?.filter(p => 
+    ['Acme', 'Zenith', 'EcoCo', 'Nimbus', 'Orbit', 'Pioneer', 'Nova', 'Atlas', 'Vertex', 'Lumina', 'Quanta', 'Summit', 'Terra', 'Volt', 'Breeze', 'Apex', 'Polar', 'Echo', 'Helio', 'Quantum', 'Sierra', 'Aurora'].includes(p.brand)
+  ) || [];
+  
+  console.log('✅ REAL Products (keep these):');
+  realProducts.forEach(p => console.log(`   [${p.id}] ${p.brand} - ${p.title.substring(0, 50)}...`));
+  
+  console.log('\n❌ MOCK Products (should remove):');
+  mockProducts.forEach(p => console.log(`   [${p.id}] ${p.brand} - ${p.title.substring(0, 50)}...`));
+  
+  const mockIds = mockProducts.map(p => p.id);
+  console.log('\n🔍 Mock IDs to delete:', mockIds.join(', '));
 }
 
-checkDatabase();
+checkProducts();

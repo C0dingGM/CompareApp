@@ -1,10 +1,63 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { getProductWithOffers } from "../lib/mock";
+import { useState, useEffect } from "react";
+
+type ProductData = {
+  product: {
+    id: string;
+    brand: string;
+    title: string;
+    category?: string;
+  };
+  offers: Array<{
+    id: string;
+    price: number;
+    retailer_id: string;
+  }>;
+  price_history: Array<{
+    ts: string;
+    price: number;
+  }>;
+};
 
 export default function ProductCard({ id }: { id: string }) {
   const router = useRouter();
-  const data = getProductWithOffers(id);
+  const [data, setData] = useState<ProductData | null>(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch(`/api/products/${id}`);
+        if (res.ok) {
+          const json = await res.json();
+          setData(json);
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [id]);
+  
+  if (loading) {
+    return (
+      <div className="cursor-pointer group">
+        <svg viewBox="0 0 320 380" className="w-full h-auto">
+          <rect x="0" y="0" width="320" height="380" rx="16" ry="16" 
+            fill="rgba(2,6,23,0.6)" 
+            stroke="rgba(148,163,184,0.25)" 
+          />
+          <text x="160" y="190" fontSize="14" fill="#94a3b8" textAnchor="middle">
+            Loading...
+          </text>
+        </svg>
+      </div>
+    );
+  }
+  
   if (!data) return null;
   
   const hist = [...data.price_history].sort((a, b) => +new Date(a.ts) - +new Date(b.ts));

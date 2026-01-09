@@ -1,16 +1,58 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAllProducts, mockSearch, Product } from '../../lib/mock';
+import { createClient } from '@supabase/supabase-js';
 import ProductCard from '../../components/ProductCard';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+type Product = {
+  id: string;
+  brand: string;
+  title: string;
+  category?: string;
+  upc?: string;
+};
 
 export default function ProductsPage({ searchParams }: { searchParams?: { q?: string; brand?: string; category?: string } }) {
   const router = useRouter();
   const q = searchParams?.q || '';
   const brand = searchParams?.brand || undefined;
   const category = searchParams?.category || undefined;
-  const allItems: Product[] = q ? mockSearch(q, brand, category) : getAllProducts();
+  
+  const [allItems, setAllItems] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  // Fetch products from database
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true);
+      let query = supabase.from('products').select('*');
+      
+      if (q) {
+        query = query.or(`title.ilike.%${q}%,brand.ilike.%${q}%`);
+      }
+      if (brand) {
+        query = query.eq('brand', brand);
+      }
+      if (category) {
+        query = query.eq('category', category);
+      }
+      
+      const { data, error } = await query;
+      
+      if (!error && data) {
+        setAllItems(data);
+      }
+      setLoading(false);
+    }
+    
+    fetchProducts();
+  }, [q, brand, category]);
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
@@ -240,8 +282,17 @@ export default function ProductsPage({ searchParams }: { searchParams?: { q?: st
           </foreignObject>
         )}
 
+        {/* Loading message */}
+        {loading && (
+          <foreignObject x="420" y="300" width="600" height="200" style={{ pointerEvents: 'auto' }}>
+            <div className="text-center py-16 text-slate-400">
+              <p className="text-xl">Loading products...</p>
+            </div>
+          </foreignObject>
+        )}
+
         {/* No results message */}
-        {allItems.length === 0 && (
+        {!loading && allItems.length === 0 && (
           <foreignObject x="420" y="300" width="600" height="200" style={{ pointerEvents: 'auto' }}>
             <div className="text-center py-16 text-slate-400">
               <p className="text-xl">No products found</p>
