@@ -220,19 +220,18 @@ export default function ProductBackground({ id, data }: { id: string; data?: Pro
           <path className="dash-green" d="M140 700 C 360 640, 540 760, 820 720" stroke="#34d399" />
         </g>
 
+        {/* Wishlist button above product panel */}
+        <foreignObject x={(1440 - cardW) / 2} y={(900 - cardH) / 2 - 60} width="220" height="50" style={{ pointerEvents: 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <AddToWishlistButton productId={id} />
+          </div>
+        </foreignObject>
+
         {/* product panel (centered) */}
         <g transform={`translate(${(1440 - cardW) / 2} ${(900 - cardH) / 2})`}>
           <rect x="0" y="0" width={cardW} height={cardH} rx="16" ry="16" fill="rgba(2,6,23,0.55)" stroke="rgba(148,163,184,0.25)" />
 
           <text x="20" y="44" fontSize="24" fill="#e5e7eb">{data.product.title}</text>
-          
-          {/* Wishlist button to the right of title */}
-          <foreignObject x="320" y="22" width="220" height="50" style={{ pointerEvents: 'auto' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <AddToWishlistButton productId={id} />
-            </div>
-          </foreignObject>
-          
           <text x="20" y="70" fontSize="14" fill="#a5b4fc">Brand: {data.product.brand}</text>
 
           <g ref={chartRef as any} transform={`translate(${16} ${92})`} onPointerMove={handleMove} onPointerLeave={handleLeave} style={{ pointerEvents: 'auto' }}>

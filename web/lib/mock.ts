@@ -30,13 +30,29 @@ const products: Product[] = [
   { id: '27', brand: 'Acme', title: 'Acme Widget Mini', category: 'Gadgets' },
   { id: '28', brand: 'EcoCo', title: 'EcoCo Glass Food Containers', category: 'Kitchen' },
   { id: '29', brand: 'Nimbus', title: 'Nimbus Travel Router', category: 'Electronics' },
-  { id: '30', brand: 'Orbit', title: 'Orbit Yoga Mat', category: 'Fitness' }
+  { id: '30', brand: 'Orbit', title: 'Orbit Yoga Mat', category: 'Fitness' },
+  { id: '31', brand: 'UGG', title: 'UGG Classic Mini II Boots', category: 'Footwear' },
+  { id: '32', brand: 'UGG', title: 'UGG Tasman Slippers', category: 'Footwear' },
+  { id: '33', brand: 'UGG', title: 'UGG Classic Ultra Mini Boots', category: 'Footwear' },
+  { id: '34', brand: 'UGG', title: 'UGG Bailey Bow II Boots', category: 'Footwear' },
+  { id: '35', brand: 'UGG', title: 'UGG Neumel Chukka Boots', category: 'Footwear' }
 ];
 
 const offers = [
   { id: 'o1', product_id: '1', retailer: 'Amazon', price: 49.99, currency: 'USD', url: 'https://amazon.com', in_stock: true, fetched_at: Date.now() },
   { id: 'o2', product_id: '1', retailer: 'Walmart', price: 47.49, currency: 'USD', url: 'https://walmart.com', in_stock: true, fetched_at: Date.now() },
-  { id: 'o3', product_id: '2', retailer: 'Target', price: 29.0, currency: 'USD', url: 'https://target.com', in_stock: false, fetched_at: Date.now() }
+  { id: 'o3', product_id: '2', retailer: 'Target', price: 29.0, currency: 'USD', url: 'https://target.com', in_stock: false, fetched_at: Date.now() },
+  { id: 'o31', product_id: '31', retailer: 'Amazon', price: 139.95, currency: 'USD', url: 'https://amazon.com', in_stock: true, fetched_at: Date.now() },
+  { id: 'o32', product_id: '31', retailer: 'Nordstrom', price: 149.95, currency: 'USD', url: 'https://nordstrom.com', in_stock: true, fetched_at: Date.now() },
+  { id: 'o33', product_id: '31', retailer: 'Zappos', price: 144.99, currency: 'USD', url: 'https://zappos.com', in_stock: true, fetched_at: Date.now() },
+  { id: 'o34', product_id: '32', retailer: 'Amazon', price: 89.95, currency: 'USD', url: 'https://amazon.com', in_stock: true, fetched_at: Date.now() },
+  { id: 'o35', product_id: '32', retailer: 'Nordstrom', price: 99.95, currency: 'USD', url: 'https://nordstrom.com', in_stock: true, fetched_at: Date.now() },
+  { id: 'o36', product_id: '33', retailer: 'Amazon', price: 119.95, currency: 'USD', url: 'https://amazon.com', in_stock: true, fetched_at: Date.now() },
+  { id: 'o37', product_id: '33', retailer: 'Zappos', price: 124.99, currency: 'USD', url: 'https://zappos.com', in_stock: true, fetched_at: Date.now() },
+  { id: 'o38', product_id: '34', retailer: 'Nordstrom', price: 169.95, currency: 'USD', url: 'https://nordstrom.com', in_stock: true, fetched_at: Date.now() },
+  { id: 'o39', product_id: '34', retailer: 'Amazon', price: 159.95, currency: 'USD', url: 'https://amazon.com', in_stock: false, fetched_at: Date.now() },
+  { id: 'o40', product_id: '35', retailer: 'Amazon', price: 109.95, currency: 'USD', url: 'https://amazon.com', in_stock: true, fetched_at: Date.now() },
+  { id: 'o41', product_id: '35', retailer: 'Zappos', price: 119.95, currency: 'USD', url: 'https://zappos.com', in_stock: true, fetched_at: Date.now() }
 ];
 
 const priceHistory = [
@@ -5618,6 +5634,372 @@ const priceHistory = [
     "product_id": "30",
     "retailer": "Amazon",
     "price": 48.16,
+    "ts": "2025-12-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Amazon",
+    "price": 140.17,
+    "ts": "2025-11-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Nordstrom",
+    "price": 149.99,
+    "ts": "2025-11-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Zappos",
+    "price": 144.32,
+    "ts": "2025-11-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Amazon",
+    "price": 138.47,
+    "ts": "2025-11-15T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Nordstrom",
+    "price": 149.95,
+    "ts": "2025-11-15T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Zappos",
+    "price": 145.89,
+    "ts": "2025-11-15T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Amazon",
+    "price": 142.29,
+    "ts": "2025-11-20T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Nordstrom",
+    "price": 149.95,
+    "ts": "2025-11-20T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Zappos",
+    "price": 147.15,
+    "ts": "2025-11-20T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Amazon",
+    "price": 135.99,
+    "ts": "2025-11-25T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Nordstrom",
+    "price": 142.49,
+    "ts": "2025-11-25T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Zappos",
+    "price": 139.99,
+    "ts": "2025-11-25T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Amazon",
+    "price": 139.95,
+    "ts": "2025-12-01T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Nordstrom",
+    "price": 149.95,
+    "ts": "2025-12-01T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Zappos",
+    "price": 144.99,
+    "ts": "2025-12-01T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Amazon",
+    "price": 138.75,
+    "ts": "2025-12-05T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Nordstrom",
+    "price": 149.95,
+    "ts": "2025-12-05T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Zappos",
+    "price": 143.89,
+    "ts": "2025-12-05T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Amazon",
+    "price": 141.22,
+    "ts": "2025-12-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Nordstrom",
+    "price": 149.95,
+    "ts": "2025-12-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "31",
+    "retailer": "Zappos",
+    "price": 145.49,
+    "ts": "2025-12-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "32",
+    "retailer": "Amazon",
+    "price": 91.47,
+    "ts": "2025-11-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "32",
+    "retailer": "Nordstrom",
+    "price": 99.95,
+    "ts": "2025-11-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "32",
+    "retailer": "Amazon",
+    "price": 88.99,
+    "ts": "2025-11-20T04:27:00.000Z"
+  },
+  {
+    "product_id": "32",
+    "retailer": "Nordstrom",
+    "price": 99.95,
+    "ts": "2025-11-20T04:27:00.000Z"
+  },
+  {
+    "product_id": "32",
+    "retailer": "Amazon",
+    "price": 87.50,
+    "ts": "2025-11-25T04:27:00.000Z"
+  },
+  {
+    "product_id": "32",
+    "retailer": "Nordstrom",
+    "price": 94.95,
+    "ts": "2025-11-25T04:27:00.000Z"
+  },
+  {
+    "product_id": "32",
+    "retailer": "Amazon",
+    "price": 89.95,
+    "ts": "2025-12-01T04:27:00.000Z"
+  },
+  {
+    "product_id": "32",
+    "retailer": "Nordstrom",
+    "price": 99.95,
+    "ts": "2025-12-01T04:27:00.000Z"
+  },
+  {
+    "product_id": "32",
+    "retailer": "Amazon",
+    "price": 90.75,
+    "ts": "2025-12-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "32",
+    "retailer": "Nordstrom",
+    "price": 99.95,
+    "ts": "2025-12-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "33",
+    "retailer": "Amazon",
+    "price": 122.47,
+    "ts": "2025-11-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "33",
+    "retailer": "Zappos",
+    "price": 124.99,
+    "ts": "2025-11-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "33",
+    "retailer": "Amazon",
+    "price": 118.99,
+    "ts": "2025-11-20T04:27:00.000Z"
+  },
+  {
+    "product_id": "33",
+    "retailer": "Zappos",
+    "price": 124.99,
+    "ts": "2025-11-20T04:27:00.000Z"
+  },
+  {
+    "product_id": "33",
+    "retailer": "Amazon",
+    "price": 115.95,
+    "ts": "2025-11-25T04:27:00.000Z"
+  },
+  {
+    "product_id": "33",
+    "retailer": "Zappos",
+    "price": 119.99,
+    "ts": "2025-11-25T04:27:00.000Z"
+  },
+  {
+    "product_id": "33",
+    "retailer": "Amazon",
+    "price": 119.95,
+    "ts": "2025-12-01T04:27:00.000Z"
+  },
+  {
+    "product_id": "33",
+    "retailer": "Zappos",
+    "price": 124.99,
+    "ts": "2025-12-01T04:27:00.000Z"
+  },
+  {
+    "product_id": "33",
+    "retailer": "Amazon",
+    "price": 121.25,
+    "ts": "2025-12-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "33",
+    "retailer": "Zappos",
+    "price": 124.99,
+    "ts": "2025-12-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "34",
+    "retailer": "Amazon",
+    "price": 162.47,
+    "ts": "2025-11-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "34",
+    "retailer": "Nordstrom",
+    "price": 169.95,
+    "ts": "2025-11-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "34",
+    "retailer": "Amazon",
+    "price": 158.99,
+    "ts": "2025-11-20T04:27:00.000Z"
+  },
+  {
+    "product_id": "34",
+    "retailer": "Nordstrom",
+    "price": 169.95,
+    "ts": "2025-11-20T04:27:00.000Z"
+  },
+  {
+    "product_id": "34",
+    "retailer": "Amazon",
+    "price": 155.95,
+    "ts": "2025-11-25T04:27:00.000Z"
+  },
+  {
+    "product_id": "34",
+    "retailer": "Nordstrom",
+    "price": 164.95,
+    "ts": "2025-11-25T04:27:00.000Z"
+  },
+  {
+    "product_id": "34",
+    "retailer": "Amazon",
+    "price": 159.95,
+    "ts": "2025-12-01T04:27:00.000Z"
+  },
+  {
+    "product_id": "34",
+    "retailer": "Nordstrom",
+    "price": 169.95,
+    "ts": "2025-12-01T04:27:00.000Z"
+  },
+  {
+    "product_id": "34",
+    "retailer": "Amazon",
+    "price": 161.25,
+    "ts": "2025-12-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "34",
+    "retailer": "Nordstrom",
+    "price": 169.95,
+    "ts": "2025-12-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "35",
+    "retailer": "Amazon",
+    "price": 112.47,
+    "ts": "2025-11-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "35",
+    "retailer": "Zappos",
+    "price": 119.95,
+    "ts": "2025-11-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "35",
+    "retailer": "Amazon",
+    "price": 108.99,
+    "ts": "2025-11-20T04:27:00.000Z"
+  },
+  {
+    "product_id": "35",
+    "retailer": "Zappos",
+    "price": 119.95,
+    "ts": "2025-11-20T04:27:00.000Z"
+  },
+  {
+    "product_id": "35",
+    "retailer": "Amazon",
+    "price": 105.95,
+    "ts": "2025-11-25T04:27:00.000Z"
+  },
+  {
+    "product_id": "35",
+    "retailer": "Zappos",
+    "price": 114.95,
+    "ts": "2025-11-25T04:27:00.000Z"
+  },
+  {
+    "product_id": "35",
+    "retailer": "Amazon",
+    "price": 109.95,
+    "ts": "2025-12-01T04:27:00.000Z"
+  },
+  {
+    "product_id": "35",
+    "retailer": "Zappos",
+    "price": 119.95,
+    "ts": "2025-12-01T04:27:00.000Z"
+  },
+  {
+    "product_id": "35",
+    "retailer": "Amazon",
+    "price": 111.25,
+    "ts": "2025-12-10T04:27:00.000Z"
+  },
+  {
+    "product_id": "35",
+    "retailer": "Zappos",
+    "price": 119.95,
     "ts": "2025-12-10T04:27:00.000Z"
   }
 ];
